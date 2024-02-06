@@ -8,8 +8,8 @@
     "build": "tsc -p .",
     "typeorm": "typeorm-ts-node-commonjs",
     "vercel-build": "echo helloooooo",
-    "migrate": "yarn build && yarn typeorm migration:generate ./src/migrations/added-user-entity -d ./src/utils/data-source.ts",
-    "db:push": "yarn build && yarn typeorm migration:run -d src/utils/data-source.ts"
+    "migrate": "npm run build && npm run typeorm migration:generate ./src/migrations/added-user-entity -d ./src/utils/data-source.ts",
+    "db:push": "npm run build && npm run typeorm migration:run -d src/utils/data-source.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -20,13 +20,13 @@
     "dotenv": "^16.0.0",
     "envalid": "^7.3.1",
     "express": "^4.18.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "pg": "^8.4.0",
     "redis": "^4.1.0",
     "reflect-metadata": "^0.1.13",
     "sharp": "^0.33.2",
-    "typeorm": "0.3.6",
+    "typeorm": "^0.3.20",
     "zod": "^3.14.4"
   },
   "devDependencies": {
@@ -39,7 +39,6 @@
     "@types/morgan": "^1.9.3",
     "@types/multer": "^1.4.11",
     "@types/node": "^16.11.10",
-    "@types/sharp": "^0.32.0",
     "morgan": "^1.10.0",
     "ts-node": "10.7.0",
     "ts-node-dev": "^1.1.8",
