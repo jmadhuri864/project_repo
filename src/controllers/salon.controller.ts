@@ -1,16 +1,17 @@
 import { NextFunction,Request,Response } from "express";
-import { CreateSalonData } from "../schemas/salon.schema";
+
 import { createSalonData } from "../services/salon.service";
+import { CreateSalonSchema } from "../schemas/salon.schema";
 
 
 
 export const createSalonHandler = async (
-    req: Request,
+    req: Request<{}, {}, CreateSalonSchema>,
     res: Response,
     next: NextFunction
 ) => {
     try {
-        const salonData: CreateSalonData = req.body;
+        const salonData= req.body;
         
         // Create a new salon using the service function
         const newSalon = await createSalonData(salonData);

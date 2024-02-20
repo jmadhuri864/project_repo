@@ -26,7 +26,7 @@ const ReviewSchema = object({
     stars: number()
 });
 
-export const CreateSalonSchema = object({
+export const createSalonSchema = object({
    body:object({
      name: string(),
     contactno: z.string(),
@@ -42,4 +42,4 @@ export const CreateSalonSchema = object({
 
 
 
-export type CreateSalonData = TypeOf<typeof CreateSalonSchema>['body'];
+export type CreateSalonSchema = TypeOf<typeof createSalonSchema>['body'];
