@@ -8,7 +8,7 @@
     "build": "tsc -p .",
     "vercel-build": "echo hello",
     "typeorm": "typeorm-ts-node-commonjs",
-     "migrate": "npm run build && typeorm migration:generate ./src/migrations/first-entity --dataSource src/utils/data-source.ts",
+    "migrate": "npm run build && typeorm migration:generate ./src/migrations/first-entity --dataSource src/utils/data-source.ts",
     "db:push": "npm run build && typeorm migration:run -d ./src/utils/data-source.ts"
   },
   "dependencies": {
@@ -21,6 +21,7 @@
     "envalid": "^7.3.1",
     "express": "^4.18.1",
     "html-to-text": "^9.0.5",
+    "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.9",

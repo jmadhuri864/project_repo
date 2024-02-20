@@ -14,7 +14,7 @@ import userRouter from './routes/user.routes';
 import salonRouter from './routes/salon.routes';
 import profileRouter from './routes/profile.routes'
 import validateEnv from './utils/validateEnv';
-import redisClient from './utils/connectRedis';
+
 
 
 // import nodemailer from 'nodemailer';
@@ -62,11 +62,11 @@ AppDataSource.initialize()
     // HEALTH CHECKER
     app.get('/api/healthchecker', async (_, res: Response) => {
       console.log("asdsa")
-      const message = await redisClient.get('try');
+      //const message = await redisClient.get('try');
 
       res.status(200).json({
         status: 'success',
-        message,
+        //message,
       });
     });
 

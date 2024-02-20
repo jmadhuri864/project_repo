@@ -4,7 +4,7 @@ const validateEnv = () => {
   cleanEnv(process.env, {
     NODE_ENV: str(),
     PORT: port(),
-
+   
     POSTGRES_HOST: str(),
     POSTGRES_PORT: port(),
     POSTGRES_USER: str(),
@@ -20,6 +20,7 @@ const validateEnv = () => {
     EMAIL_PASS: str(),
     EMAIL_HOST: str(),
     EMAIL_PORT: port(),
+
   });
 };
 
