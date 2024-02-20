@@ -1,4 +1,4 @@
-import { array, number, object, string, z } from "zod";
+import { TypeOf, array, number, object, string, z } from "zod";
 
 const AddressSchema = object({
     street: string(),
@@ -42,4 +42,4 @@ export const CreateSalonSchema = object({
 
 
 
-export type CreateSalonData = z.TypeOf<typeof CreateSalonSchema>['body'];
+export type CreateSalonData = TypeOf<typeof CreateSalonSchema>['body'];
