@@ -1,11 +1,10 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne} from "typeorm";
 import { User } from "./user.entity";
 import Model from "./model.entity";
 
 @Entity("profile")
-export class UserProfile {
-    @PrimaryGeneratedColumn()
-    id: string;
+export class UserProfile extends Model {
+    
 
     @Column()
     fullName: string;
@@ -25,10 +24,10 @@ export class UserProfile {
     @Column()
     gender: string;
 
-    @Column()
+    @Column({ default: 'default.jpeg' })
     image: string;
 
-    @OneToOne(() => User)
-    @JoinColumn()
-    user: User;
-}
+    @OneToOne(() => User,user =>user.profile) // Specify the related entity
+   // @JoinColumn()
+    user: User; // Define the property to hold the related entity
+  }

@@ -1,4 +1,4 @@
-import { object, string, TypeOf, z } from 'zod';
+import { object, string, TypeOf } from 'zod';
 
 export const createUserSchema = object({
   body: object({
@@ -20,6 +20,31 @@ export const createUserSchema = object({
     message: 'Passwords do not match',
   }),
 });
+export const forgotPasswordSchema = object({
+  body: object({
+    email: string({
+      required_error: 'Email is required',
+    }).email('Email is invalid'),
+  }),
+});
+
+export const resetPasswordSchema = object({
+  params: object({
+    resetToken: string(),
+  }),
+  body: object({
+    password: string({
+      required_error: 'Password is required',
+    }).min(8, 'Password must be more than 8 characters'),
+    passwordConfirm: string({
+      required_error: 'Please confirm your password',
+    }),
+  }).refine((data) => data.password === data.passwordConfirm, {
+    message: 'Passwords do not match',
+    path: ['passwordConfirm'],
+  }),
+});
+
 
 export const loginUserSchema = object({
   body: object({
@@ -38,3 +63,6 @@ export type CreateUserInput = Omit<
 >;
 
 export type LoginUserInput = TypeOf<typeof loginUserSchema>['body'];
+export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>['body'];
+export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
+

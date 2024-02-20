@@ -1,16 +1,21 @@
 import { CookieOptions, NextFunction, Request, Response } from 'express';
 import config from 'config';
-import { CreateUserInput, LoginUserInput } from '../schemas/user.schema';
+
+import { CreateUserInput,  LoginUserInput } from '../schemas/user.schema';
 import {
   createUser,
+
   findUserByEmail,
   findUserById,
   signTokens,
+ 
 } from '../services/user.service';
 import AppError from '../utils/appError';
 import redisClient from '../utils/connectRedis';
 import { signJwt, verifyJwt } from '../utils/jwt';
 import { User } from '../entities/user.entity';
+import { getprofile } from '../services/userProfile.service';
+
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -46,7 +51,7 @@ export const registerUserHandler = async (
     const user = await createUser({
     
       email: email.toLowerCase(),
-      password,
+      password
     });
 
     res.status(201).json({
@@ -74,7 +79,11 @@ export const loginUserHandler = async (
   try {
     const { email, password } = req.body;
     const user = await findUserByEmail({ email });
+    //const email1=res.locals.user.email;
 
+    const userprofile = await getprofile(email);
+    const name =userprofile?.nickname ;
+    console.log(name)
     //1. Check if user exists and password is valid
     if (!user || !(await User.comparePasswords(password, user.password))) {
       return next(new AppError(400, 'Invalid email or password'));
@@ -95,8 +104,10 @@ export const loginUserHandler = async (
     res.status(200).json({
       status: 'success',
       access_token,
+      name
+      // refresh_token
     });
-  } catch (err: any) {
+  } catch (err) {
     next(err);
   }
 };
@@ -156,7 +167,7 @@ export const refreshAccessTokenHandler = async (
       status: 'success',
       access_token,
     });
-  } catch (err: any) {
+  } catch (err) {
     next(err);
   }
 };
@@ -184,7 +195,8 @@ export const logoutHandler = async (
     res.status(200).json({
       status: 'success',
     });
-  } catch (err: any) {
+  } catch (err) {
     next(err);
   }
 };
+

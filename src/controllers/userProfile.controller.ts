@@ -2,8 +2,8 @@ import { NextFunction,Request, Response } from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
 import { CreateProfileSchema } from '../schemas/userProfile.schema';
-import { findUserByEmail, findUserById } from '../services/user.service';
-import { createProfile } from '../services/userProfile.service';
+import { findUserByEmail} from '../services/user.service';
+import { createProfile, getprofile } from '../services/userProfile.service';
 
 const multerStorage = multer.memoryStorage();
 
@@ -48,7 +48,7 @@ export const resizePostImage = async (
     req.body.image = fileName;
 
     next();
-  } catch (err: any) {
+  } catch (err) {
     next(err);
   }
 };
@@ -63,8 +63,8 @@ export const userProfileCreateHandler = async (
     const user = await findUserByEmail({ email: req.body.email });
 
     //const user = await findUserByEmail(req.body.email as string);
-
-    const post = await createProfile(req.body, user!);
+    const image = req.body.image || 'default.jpeg';
+    const post = await createProfile({ ...req.body, image }, user!);
 
     res.status(201).json({
       status: 'success',
@@ -79,6 +79,27 @@ export const userProfileCreateHandler = async (
         message: 'user profile not created',
       });
     }
+    next(err);
+  }
+};
+
+export const getprofileHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const email = res.locals.user.email;
+    const userprofile = await getprofile(email);
+    console.log(userprofile);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        userprofile
+      },
+    });
+  } catch (err) {
     next(err);
   }
 };

@@ -21,6 +21,7 @@ export const deserializeUser = async (
       access_token = req.cookies.access_token;
     }
 
+
     if (!access_token) {
       return next(new AppError(401, 'You are not logged in'));
     }
@@ -53,7 +54,8 @@ export const deserializeUser = async (
     res.locals.user = user;
 
     next();
-  } catch (err: any) {
+  } catch (err) {
+
     next(err);
   }
 };

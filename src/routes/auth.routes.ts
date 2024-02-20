@@ -8,18 +8,29 @@ import {
 import { deserializeUser } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
 import { validate } from '../middleware/validate';
-import { createUserSchema, loginUserSchema } from '../schemas/user.schema';
+import { createUserSchema,  loginUserSchema} from '../schemas/user.schema';
 import { userProfileCreateHandler } from '../controllers/userProfile.controller';
 import { createProfileSchema } from '../schemas/userProfile.schema';
 
 const router = express.Router();
 
 // Register user
-router.post('/register', validate(createUserSchema), registerUserHandler);
+router.post('/signup', validate(createUserSchema), registerUserHandler);
 
-router.post('/createProfile',validate(createProfileSchema),userProfileCreateHandler)
+router.post('/register',validate(createProfileSchema),userProfileCreateHandler)
 // Login user
 router.post('/login', validate(loginUserSchema), loginUserHandler);
+// router.post(
+//   '/forgotpassword',
+//   validate(forgotPasswordSchema),
+//   forgotPasswordHandler
+// );
+
+// router.patch(
+//   '/resetpassword/:resetToken',
+//   validate(resetPasswordSchema),
+//   resetPasswordHandler
+// );
 
 
 

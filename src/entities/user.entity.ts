@@ -1,18 +1,18 @@
-import { Entity, Column, Index, BeforeInsert, OneToOne, JoinColumn } from 'typeorm';
-import bcrypt from 'bcryptjs';
-import Model from './model.entity';
-import { UserProfile } from './userProfile.entity';
+import {
+  Entity,
+  Column,
+  Index,
+  BeforeInsert,
+  OneToOne,
+  JoinColumn,
+} from "typeorm";
+import bcrypt from "bcryptjs";
+import Model from "./model.entity";
+import { UserProfile } from "./userProfile.entity";
 
-// export enum RoleEnumType {
-//   USER = 'user',
-//   ADMIN = 'admin',
-// }
-
-@Entity('users')
+@Entity("users")
 export class User extends Model {
-  
-
-  @Index('email_index')
+  @Index("email_index")
   @Column({
     unique: true,
   })
@@ -21,22 +21,15 @@ export class User extends Model {
   @Column()
   password: string;
 
-  // @Column({
-  //   type: 'enum',
-  //   enum: RoleEnumType,
-  //   default: RoleEnumType.USER,
-  // })
-  // role: RoleEnumType.USER;
-
-  
   @Column({
     default: true,
   })
   verified: boolean;
+
   
-  // @OneToOne(() => UserProfile, userProfile => userProfile.user)
-  //   @JoinColumn()
-  //   userProfile: UserProfile;
+  @OneToOne(() => UserProfile)
+  @JoinColumn()
+  profile: UserProfile;
 
   @BeforeInsert()
   async hashPassword() {

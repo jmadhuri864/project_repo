@@ -1,6 +1,7 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 import config from 'config';
 
+
 export const signJwt = (
   payload: Object,
   keyName: 'accessTokenPrivateKey' | 'refreshTokenPrivateKey',

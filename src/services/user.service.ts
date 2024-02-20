@@ -1,7 +1,6 @@
 import config from 'config';
-import { DeepPartial } from 'typeorm';
+import { DeepPartial, FindOneOptions } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { CreateUserInput } from '../schemas/user.schema';
 import redisClient from '../utils/connectRedis';
 import { AppDataSource } from '../utils/data-source';
 import { signJwt } from '../utils/jwt';
@@ -10,6 +9,40 @@ const userRepository = AppDataSource.getRepository(User);
 
 export const createUser = async (input: DeepPartial<User>) => {
   return userRepository.save(userRepository.create(input));
+};
+
+// export const updateUser = async (input: DeepPartial<User>): Promise<User> => {
+//   //const userRepository = getRepository(User);
+
+//   try {
+//     const updatedUser = await userRepository.save(userRepository.create(input));
+//     return updatedUser;
+//   } catch (error) {
+//     console.error('Error updating user:', error);
+//     throw error;
+//   }
+// };
+
+export const updateUser = async (
+  where: FindOneOptions<User>['where'],
+  data: DeepPartial<User>
+): Promise<User | undefined> => {
+  //const userRepository = getRepository(User);
+
+  try {
+    const userToUpdate = await userRepository.findOne({ where });
+
+    if (userToUpdate) {
+      Object.assign(userToUpdate, data);
+      const updatedUser = await userRepository.save(userToUpdate);
+      return updatedUser;
+    } else {
+      return undefined;
+    }
+  } catch (error) {
+    console.error('Error updating user:', error);
+    throw error;
+  }
 };
 
 export const findUserByEmail = async ({ email }: { email: string }) => {
