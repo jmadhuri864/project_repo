@@ -1,5 +1,4 @@
 import * as dotenv from "dotenv";
-
 dotenv.config(); // Load environment variables from .env file
 
 import express, { NextFunction, Request, Response } from "express";
@@ -16,11 +15,6 @@ import profileRouter from "./routes/profile.routes";
 import validateEnv from "./utils/validateEnv";
 import redisClient from "./utils/connectRedis";
 
-// import nodemailer from 'nodemailer';
-// (async function () {
-//   const credentials = await nodemailer.createTestAccount();
-//   console.log(credentials);
-// })();
 AppDataSource.initialize()
   .then(async () => {
     // VALIDATE ENV
@@ -33,7 +27,6 @@ AppDataSource.initialize()
     app.set("views", `${__dirname}/views`);
 
     // MIDDLEWARE
-
     // 1. Body parser
     app.use(express.json({ limit: "10kb" }));
 
@@ -50,16 +43,6 @@ AppDataSource.initialize()
         credentials: true,
       })
     );
-
-    // //4. Cors
-    // app.use(
-    //   cors({
-    //     origin: config.get<string>('origin'),  //add
-    //     credentials: true,
-    //     methods:["GET","POST","PUT","DELETE"]  //ADD
-    //   })
-    // );
-    // //app.use(cors())
 
     // ROUTES
     app.use("/api/auth", authRouter);
