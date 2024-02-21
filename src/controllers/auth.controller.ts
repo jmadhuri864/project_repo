@@ -83,7 +83,6 @@ export const loginUserHandler = async (
 
     const userprofile = await getprofile(email);
     const name =userprofile?.nickname ;
-    console.log(name)
     //1. Check if user exists and password is valid
     if (!user || !(await User.comparePasswords(password, user.password))) {
       return next(new AppError(400, 'Invalid email or password'));
@@ -104,7 +103,6 @@ export const loginUserHandler = async (
     res.status(200).json({
       status: 'success',
       access_token,
-      name
       // refresh_token
     });
   } catch (err) {
