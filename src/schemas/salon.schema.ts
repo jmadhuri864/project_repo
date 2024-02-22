@@ -1,4 +1,4 @@
-import { object, string, array, nullable, number } from "zod";
+import { object, string, array, nullable, number, TypeOf } from "zod";
 
 // Define the schema for the Address entity
 const AddressSchema = object({
@@ -45,16 +45,10 @@ export const createSalonSchema = object({
     }),
 });
 
-// Define the type for the CreateSalonSchema
-export type CreateSalonSchema = {
-    body: {
-        name: string;
-        contactno: string;
-        categories: string[] | null;
-        addresses: { street: string; city: string }[];
-        barbers: { name: string; specialty: string }[];
-        services: { name: string }[];
-        packages: { name: string; includedServices: { name: string }[] }[];
-        reviews: { comment: string; rating: number; likes: number; stars: number}[];
-}
-};
+
+export type CreateSalonSchema = TypeOf<typeof createSalonSchema>['body'];
+
+
+
+
+

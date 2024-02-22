@@ -50,7 +50,7 @@ AppDataSource.initialize()
     app.use("/api/profile", profileRouter);
     app.use("/api/salon", salonRouter);
 
-    // HEALTH CHECKER
+    //HEALTH CHECKER
     app.get("/api/healthchecker", async (_, res: Response) => {
       console.log("asdsa");
       const message = await redisClient.get("try");
@@ -66,7 +66,7 @@ AppDataSource.initialize()
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "X-Requested-With");
       next();
-      // next(new AppError(404, `Route ${req.originalUrl} not found`));
+      //next(new AppError(404, `Route ${req.originalUrl} not found`));
     });
 
     // GLOBAL ERROR HANDLER

@@ -89,17 +89,26 @@ export const getprofileHandler = async (
   next: NextFunction
 ) => {
   try {
-    const email = res.locals.user.email;
-    const userprofile = await getprofile(email);
-    console.log(userprofile);
+   const email=res.locals.user.email;
 
-    res.status(200).json({
+   const userprofile = await getprofile(email);
+   const user = res.locals.user;
+    //const name=res.locals.userProfile.nickname;
+    console.log(userprofile)
+
+    res.status(200).status(200).json({
       status: 'success',
       data: {
-        userprofile
+        userprofile,
+       user
+        //name
+        //userName
+      
       },
     });
   } catch (err) {
     next(err);
   }
 };
+
+
