@@ -40,6 +40,7 @@ AppDataSource.initialize()
     app.use(
       cors({
         origin: config.get<string>("origin"),
+        //origin:'http://localhost:3000',
         credentials: true,
       })
     );
@@ -61,7 +62,7 @@ AppDataSource.initialize()
       });
     });
 
-    // UNHANDLED ROUTE
+    //UNHANDLED ROUTE
     app.all("*", (req: Request, res: Response, next: NextFunction) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "X-Requested-With");
