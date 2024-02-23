@@ -7,7 +7,7 @@ import { Package } from "./package.entity";
 import { Review } from "./review.entity";
 
 // Define a constant array of valid categories
-//const VALID_CATEGORIES = ["Haircuts", "Makeup", "Manicure", "Massage","All"];
+const VALID_CATEGORIES = ["Haircuts", "Makeup", "Manicure", "Massage","All"];
 @Entity("salon")
 export class Salon extends Model {
   @Column()
@@ -16,10 +16,10 @@ export class Salon extends Model {
   @Column()
   contactno: string;
 
-  @Column({ type: "simple-array" , nullable: true })
-  categories: string[] ;
-
-  @OneToMany(() => Address, address => address.salon)
+  @Column({ type: "simple-array" })
+  categories: string[]=[];
+  
+  @OneToMany(() => Address, (address) => address.salon)
   addresses: Address[]; // One salon can have multiple addresses (branches)
 
   @OneToMany(() => Barber, (barber) => barber.salon)
@@ -34,7 +34,12 @@ export class Salon extends Model {
   @OneToMany(() => Review, (review) => review.salon)
   reviews: Review[];
 
-  
-
- 
+  // Custom setter to validate categories
+  setCategories(categories: string[]) {
+    // Check if at least one category is selected and all selected categories are valid
+    if (!categories || categories.length === 0 || !categories.every(category => VALID_CATEGORIES.includes(category))) {
+      throw new Error("Invalid categories selection");
+    }
+    this.categories = categories;
+  }
 }
