@@ -1,9 +1,10 @@
 import { NextFunction,Request,Response } from "express";
 
-import { createSalonData, getAllSalons, getSalonsByCategory } from "../services/salon.service";
+import { createSalonData, getAllSalons} from "../services/salon.service";
 import { CreateSalonSchema} from "../schemas/salon.schema";
 import AppError from "../utils/appError";
-import { GetCategorySchema } from "../schemas/category.schema";
+// import { GetCategorySchema, getCategorySchema } from "../schemas/category.schema";
+// import { Salon } from "../entities/salon.entity";
 
 
 
@@ -51,30 +52,29 @@ export const getAllSalonhandler = async (
     }
   };
 
-  export const getSalonsByCategoryHandler = async (
-    req: Request<{ category: string }, {}, {}, GetCategorySchema>,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      // Validate request parameters
-      const {category}  = req.params;
+  // export const getSalonsByCategoryHandler = async (
+  //   req: Request<{ category: string }, {}, {}, GetCategorySchema>, // Use the defined schema type
+  //   res: Response,
+  //   next: NextFunction
+  // ) => {
+  //   try {
+  //     const { category } = req.params;
+  // console.log(category);
+  //     // Validate the request parameters using Zod schema
+  //     const validatedParams = getCategorySchema.parse(req.params);
+  //     console.log(validatedParams)
   
-    //   // If validation fails, handle the error
-    //   if (!category.success) {
-    //     throw new Error(category.error.message);
-    //   }
+  //     // Call the service function to get salons by category
+  //     const salons: Salon[] = await getSalonsByCategory(category);
   
-      // Assuming category is passed as a URL parameter
-      const salons = await getSalonsByCategory(category);
-  
-      res.status(200).json({
-        status: 'success',
-        data: {
-          salons,
-        },
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
+  //     res.status(200).json({
+  //       status: 'success',
+  //       data: {
+  //         salons,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     console.log(error)
+  //     next(error); // Pass any caught errors to the error handling middleware
+  //   }
+  // };

@@ -10,7 +10,7 @@ export const getMeHandler = async (
   try {
    //const email=res.locals.user.email;
 
-
+   console.log("hellllooo")
    //const userprofile = await getprofile(email);
    const user = res.locals.user;
 

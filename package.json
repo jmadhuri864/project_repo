@@ -8,8 +8,11 @@
     "build": "tsc -p .",
     "vercel-build": "echo hello",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migrate": "npm run build && typeorm migration:generate ./src/migrations/first-entity --dataSource src/utils/data-source.ts",
-    "db:push": "npm run build && typeorm migration:run -d ./src/utils/data-source.ts"
+    "migrate": "rimraf build && npm run build && npm run typeorm -- migration:generate src/migrations/new-entry-entity -d src/utils/data-source.ts ",
+   
+
+    
+    "db:push": "typeorm migration:run -d ./src/utils/data-source.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -24,6 +27,7 @@
     "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "netlify-lambda": "^2.0.16",
     "nodemailer": "^6.9.9",
     "pg": "^8.4.0",
     "pug": "^3.0.2",
@@ -46,9 +50,6 @@
     "@types/node": "^16.11.10",
     "@types/nodemailer": "^6.4.14",
     "@types/pug": "^2.0.10",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "eslint": "^8.56.0",
     "morgan": "^1.10.0",
     "prisma": "^5.9.1",
     "ts-node": "10.7.0",

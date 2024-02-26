@@ -92,19 +92,5 @@ export const getAllSalons = async (): Promise<Salon[]> => {
 };
 
 
-const VALID_CATEGORIES = ["Haircuts", "Makeup", "Manicure", "Massage", "All"];
 
-export const getSalonsByCategory = async (category: string): Promise<Salon[]> => {
-    let query = salonRepository.createQueryBuilder("salon");
-  
-    // Filter salons based on the specified category
-    if (!VALID_CATEGORIES.includes(category)) {
-      throw new Error("Invalid category");
-    }
-  
-    if (category !== "All") {
-      query = query.where(":category = ANY(salon.categories)", { category });
-    }
-  
-    return await query.getMany();
-};
+

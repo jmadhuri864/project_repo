@@ -35,15 +35,32 @@ AppDataSource.initialize()
 
     // 3. Cookie Parser
     app.use(cookieParser());
-
+    // Add CORS middleware
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   res.setHeader('Access-Control-Allow-Credentials', 'true');
+//   next();
+// });
+// app.use((req, res, next) => {
+//   res.setHeader('Content-Type', 'application/json'); // Set Content-Type as application/json
+//   next();
+// });
     // 4. Cors
     app.use(
       cors({
-        origin: config.get<string>("origin"),
-        //origin:'http://localhost:3000',
-        credentials: true,
+        //origin: config.get<string>("origin"),
+        //origin:'http://localhost:3000/dashboard',
+        //origin:'https://8ae4-163-53-201-67.ngrok-free.app',
+        origin: true,
+        
+        credentials: true
       })
-    );
+     );
+    // Handle CORS preflight requests
+//app.options('*', cors());
+
 
     // ROUTES
     app.use("/api/auth", authRouter);
