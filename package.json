@@ -1,15 +1,19 @@
 {
   "name": "jwt_auth_node_typeorm",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "license": "MIT",
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only --exit-child src/app.ts",
     "build": "tsc -p .",
     "vercel-build": "echo hello",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migrate": "rimraf build && npm run build && npm run typeorm -- migration:generate src/migrations/new-entry-entity -d src/utils/data-source.ts ",
-    "db:push": "typeorm migration:run -d ./src/utils/data-source.ts"
+    "migrate:create": "npm run build && npm run typeorm -- migration:create ./src/migrations/new-entry-entity",
+    
+    "migrate": "npm run build && npm run typeorm -- migration:generate ./src/migrations/new-entry-entity -d ./src/utils/data-source.ts ",
+    "db:push": "npm run build && npm run typeorm -- migration:run -d ./src/utils/data-source.ts"
+
+    
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

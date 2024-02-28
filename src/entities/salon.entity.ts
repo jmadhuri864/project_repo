@@ -7,7 +7,7 @@ import { Package } from "./package.entity";
 import { Review } from "./review.entity";
 
 // Define a constant array of valid categories
-const VALID_CATEGORIES = ["Haircuts", "Makeup", "Manicure", "Massage","All"];
+export const VALID_CATEGORIES = ["Haircuts", "Makeup", "Manicure", "Massage","All"];
 @Entity("salon")
 export class Salon extends Model {
   @Column()

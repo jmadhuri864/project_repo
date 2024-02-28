@@ -6,7 +6,7 @@ import { Salon } from "../entities/salon.entity";
 import { Service } from "../entities/service.entity";
 import { CreateSalonSchema } from "../schemas/salon.schema";
 import { AppDataSource } from "../utils/data-source";
-
+import { VALID_CATEGORIES } from '../entities/salon.entity';
 const salonRepository = AppDataSource.getRepository(Salon);
 
 // export const createSalonData = async (input: Salon) => {
@@ -92,5 +92,24 @@ export const getAllSalons = async (): Promise<Salon[]> => {
 };
 
 
+export const getSalonsByCategory = async (category: string): Promise<Salon[]> => {
+  //const salonRepository = getRepository(Salon);
 
+  let salons: Salon[];
+
+  if (category === 'All') {
+    // If category is 'All', fetch all salons
+    salons = await salonRepository.find();
+  } else if (VALID_CATEGORIES.includes(category)) {
+    // Filter salons based on the specified category
+    salons = await salonRepository.createQueryBuilder('salon')
+      .where(':category = ANY(salon.categories)', { category: [category] })
+      .getMany();
+  } else {
+    // Invalid category provided
+    throw new Error("Invalid category");
+  }
+
+  return salons;
+};
 

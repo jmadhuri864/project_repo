@@ -1,10 +1,10 @@
 import { createClient } from 'redis';
 
-// const redisUrl = 'redis://localhost:6379';
+ const redisUrl = 'redis://localhost:6379';
 //const redisUrl = 'rediss://default:AVNS_j2KxzPsOnnIKVbSjnK3@redis-2ad1d044-jadhavm21199-22ca.a.aivencloud.com:26318';
 //const redisUrl = 'rediss://red-cnapgof109ks739nql5g:kpQis18TQmio9mGK8zPbRAopbvUfymZu@singapore-redis.render.com:6379';
 
-const redisUrl='redis://default:d68e94018e7845f19c0363e92ec6dae3@hardy-anchovy-30917.upstash.io:30917'
+//const redisUrl='redis://default:d68e94018e7845f19c0363e92ec6dae3@hardy-anchovy-30917.upstash.io:30917'
 const redisClient = createClient({
   url: redisUrl,
 });
