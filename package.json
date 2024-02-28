@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only --exit-child src/app.ts",
     "build": "tsc -p .",
-    "vercel-build": "echo hello",
+    
     "typeorm": "typeorm-ts-node-commonjs",
     "migrate:create": "npm run build && npm run typeorm -- migration:create ./src/migrations/new-entry-entity",
     
