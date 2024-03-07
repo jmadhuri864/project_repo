@@ -6,14 +6,10 @@
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only --exit-child src/app.ts",
     "build": "tsc -p .",
-    
     "typeorm": "typeorm-ts-node-commonjs",
     "migrate:create": "npm run build && npm run typeorm -- migration:create ./src/migrations/new-entry-entity",
-    
     "migrate": "npm run build && npm run typeorm -- migration:generate ./src/migrations/new-entry-entity -d ./src/utils/data-source.ts ",
     "db:push": "npm run build && npm run typeorm -- migration:run -d ./src/utils/data-source.ts"
-
-    
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -50,6 +46,7 @@
     "@types/node": "^16.11.10",
     "@types/nodemailer": "^6.4.14",
     "@types/pug": "^2.0.10",
+    "@types/sharp": "^0.32.0",
     "morgan": "^1.10.0",
     "prisma": "^5.9.1",
     "ts-node": "10.7.0",

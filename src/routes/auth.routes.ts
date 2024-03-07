@@ -11,9 +11,12 @@ import { validate } from '../middleware/validate';
 import { createUserSchema,  loginUserSchema} from '../schemas/user.schema';
 import { userProfileCreateHandler } from '../controllers/userProfile.controller';
 import { createProfileSchema } from '../schemas/userProfile.schema';
+import { uploadPostImageDisk } from '../upload/single-upload-disk';
+import { resizePostImage, uploadPostImage } from '../upload/single-upload-sharp';
 
 const router = express.Router();
-
+router.route('/register').post(uploadPostImage,
+  resizePostImage,validate(createProfileSchema),userProfileCreateHandler)
 // Register user
 router.post('/signup', validate(createUserSchema), registerUserHandler);
 

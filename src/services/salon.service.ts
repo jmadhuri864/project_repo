@@ -20,6 +20,7 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
   const salon = new Salon();
   salon.name = input.name;
   salon.contactno = input.contactno;
+  salon.image=input.image;
   salon.categories = categories;
   salon.addresses = [];
   salon.barbers = [];
@@ -38,7 +39,9 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
 
   for (const barberData of input.barbers) {
       const barber = new Barber();
-      barber.name = barberData.name;
+      barber.first_name = barberData.first_name ?? '';
+      barber.last_name = barberData.last_name ?? '';
+      barber.image=barberData.image;
       barber.specialty = barberData.specialty;
       await salonRepository.manager.save(barber);
       salon.barbers.push(barber);
@@ -99,11 +102,12 @@ export const getSalonsByCategory = async (category: string): Promise<Salon[]> =>
 
   if (category === 'All') {
     // If category is 'All', fetch all salons
-    salons = await salonRepository.find();
-  } else if (VALID_CATEGORIES.includes(category)) {
+    salons = await salonRepository.find({ relations: ['addresses'] });
+  } else if (Salon.isValidCategory(category)) {
     // Filter salons based on the specified category
     salons = await salonRepository.createQueryBuilder('salon')
-      .where(':category = ANY(salon.categories)', { category: [category] })
+    .leftJoinAndSelect('salon.addresses', 'address')
+      .where('LOWER(salon.categories) LIKE LOWER(:category)', { category: `%${category}%` })
       .getMany();
   } else {
     // Invalid category provided
@@ -113,3 +117,16 @@ export const getSalonsByCategory = async (category: string): Promise<Salon[]> =>
   return salons;
 };
 
+export const getSalonsByName = async (name: string): Promise<any[]> => {
+  let salons: Salon[];
+
+  // Assuming you have a repository named salonRepository
+  salons = await salonRepository.createQueryBuilder('salon')
+  .leftJoinAndSelect('salon.addresses', 'address')
+    .where('LOWER(salon.name) LIKE LOWER(:startsWith)', { startsWith: `${name}%` }) // Name starts with provided string
+    .orWhere('LOWER(salon.name) LIKE LOWER(:endsWith)', { endsWith: `%${name}` }) // Name ends with provided string
+    .orWhere('LOWER(salon.name) LIKE LOWER(:contains)', { contains: `%${name}%` }) // Name contains provided string
+    .getMany();
+
+  return salons;
+};

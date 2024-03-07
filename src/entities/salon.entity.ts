@@ -16,6 +16,11 @@ export class Salon extends Model {
   @Column()
   contactno: string;
 
+  @Column({
+    default: 'default-salon.png',nullable:true
+  })
+  image: string;
+
   @Column({ type: "simple-array" })
   categories: string[]=[];
   
@@ -41,5 +46,9 @@ export class Salon extends Model {
       throw new Error("Invalid categories selection");
     }
     this.categories = categories;
+  }
+
+  static isValidCategory(category: string): boolean {
+    return VALID_CATEGORIES.includes(category);
   }
 }

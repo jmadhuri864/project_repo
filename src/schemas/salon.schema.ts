@@ -8,14 +8,16 @@ const AddressSchema = object({
 
 // Define the schema for the Barber entity
 const BarberSchema = object({
-    name: string(),
+    first_name: string().nullable(),
+    last_name:string().nullable(),
+    image:string(),
     specialty: string(),
 });
 
 // Define the schema for the Service entity
 const ServiceSchema = object({
     name: string(),
-});
+})
 
 // Define the schema for the Package entity
 const PackageSchema = object({
@@ -36,6 +38,7 @@ export const createSalonSchema = object({
     body: object({
         name: string(),
         contactno: string(),
+        image:string(),
         categories: array(string()).nullable(),
         addresses: array(AddressSchema),
         barbers: array(BarberSchema),

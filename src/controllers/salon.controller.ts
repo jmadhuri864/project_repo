@@ -1,8 +1,9 @@
 import { NextFunction,Request,Response } from "express";
 
-import { createSalonData, getAllSalons} from "../services/salon.service";
+import { createSalonData, getAllSalons, getSalonsByCategory} from "../services/salon.service";
 import { CreateSalonSchema} from "../schemas/salon.schema";
 import AppError from "../utils/appError";
+import { Salon } from "../entities/salon.entity";
 // import { GetCategorySchema, getCategorySchema } from "../schemas/category.schema";
 // import { Salon } from "../entities/salon.entity";
 
@@ -15,7 +16,8 @@ export const createSalonHandler = async (
 ) => {
     try {
         const salonData= req.body;
-        
+        const image = req.body.image || 'default-barber.jpeg';
+        salonData.image=image;
         // Create a new salon using the service function
         const newSalon = await createSalonData(salonData);
 
@@ -78,3 +80,22 @@ export const getAllSalonhandler = async (
   //     next(error); // Pass any caught errors to the error handling middleware
   //   }
   // };
+
+
+  export const getSalonsByCategoryController = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const category: string = req.params.category; // Assuming category is passed as a parameter in the route
+      
+      console.log(Salon.isValidCategory(category))
+      const salons = await getSalonsByCategory(category);
+
+      const sanitizedSalons = salons.map(salon => {
+        const { categories, ...sanitizedSalon } = salon;
+        return sanitizedSalon;
+      });
+  
+      res.status(200).json({salons: sanitizedSalons  });
+    } catch (error) {
+      res.status(400).json({error});
+    }
+  };

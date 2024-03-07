@@ -8,21 +8,23 @@ export const getMeHandler = async (
   next: NextFunction
 ) => {
   try {
-   //const email=res.locals.user.email;
-
-   console.log("hellllooo")
-   //const userprofile = await getprofile(email);
+   const email=res.locals.user.email;
+   //console.log(email)
+   //console.log("hellllooo")
+   const userprofile = await getprofile(email);
+   //console.log(userprofile)
    const user = res.locals.user;
 
-    //const name=res.locals.userProfile.nickname;
-   console.log("hellllooo",user)
+    const name=userprofile?.nickname
+   console.log(name)
 
     res.status(200).json({
       status: 'success',
       data: {
         //userprofile,
-        user
-        //userName
+        //user,
+        email,
+        name
       
       },
     });
