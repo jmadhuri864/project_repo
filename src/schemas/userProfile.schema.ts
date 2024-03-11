@@ -20,4 +20,32 @@ export const createProfileSchema = object({
     gender: string({ required_error: 'Gender is required' }),
   })
 });
+
+const params = {
+  params: object({
+    id: string(),
+  }),
+};
+
+export const getProfileSchema = object({
+  ...params,
+});
+
+export const updateProfileSchema = object({
+  ...params,
+  body: object({
+    image: string().optional(),
+    fullName: string({ required_error: 'Full name is required' }),
+    nickname: string({ required_error: 'Nickname is required' }),
+    dateOfBirth:  string().transform(toDateObject).optional(), 
+    email: string({ required_error: 'Email address is required' }).email('Invalid email address'),
+    mobileNumber: string({ required_error: 'Mobile number is required' }),
+    gender: string({ required_error: 'Gender is required' }),
+  }).partial(),
+});
+
+
+
+export type GetProfileInput = TypeOf<typeof getProfileSchema>['params'];
+export type UpdateProfileInput = TypeOf<typeof updateProfileSchema>;
 export type CreateProfileSchema = TypeOf<typeof createProfileSchema>['body'];

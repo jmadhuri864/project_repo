@@ -41,3 +41,7 @@ export const getUserProfileByNickname = async (
     throw new Error("Error fetching user profile by email");
   }
 };
+
+export const getprofile1 = async (id: string) => {
+  return await userProfileRepository.findOneBy({ id: id });
+};
