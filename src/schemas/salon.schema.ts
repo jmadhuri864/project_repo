@@ -33,6 +33,9 @@ const ReviewSchema = object({
     stars: number(), // Assuming stars is a string
 });
 
+const GallerySchema=object({
+    imageUrl: string()
+})
 // Define the createSalonSchema
 export const createSalonSchema = object({
     body: object({
@@ -45,9 +48,20 @@ export const createSalonSchema = object({
         services: array(ServiceSchema),
         packages: array(PackageSchema),
         reviews: array(ReviewSchema),
+        gallery:array(GallerySchema).optional()
     }),
 });
 
+export const SalonDTO = object({
+    name: string(),
+    image: string(),
+    addresses: array(AddressSchema),
+    star: ReviewSchema.pick({stars:true})
+    //.shape({ stars: number() }).pick({ stars: true }),
+});
+
+
+export type SalonDTOType = TypeOf<typeof SalonDTO>;
 
 export type CreateSalonSchema = TypeOf<typeof createSalonSchema>['body'];
 

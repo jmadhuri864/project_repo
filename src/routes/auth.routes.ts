@@ -41,6 +41,6 @@ router.post('/login', validate(loginUserSchema), loginUserHandler);
 router.get('/logout', deserializeUser, requireUser, logoutHandler);
 
 // Refresh access token
-router.get('/refresh', refreshAccessTokenHandler);
+router.get('/refresh/:refresh_token', refreshAccessTokenHandler);
 
 export default router;

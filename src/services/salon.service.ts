@@ -4,9 +4,10 @@ import { Package } from "../entities/package.entity";
 import { Review } from "../entities/review.entity";
 import { Salon } from "../entities/salon.entity";
 import { Service } from "../entities/service.entity";
-import { CreateSalonSchema } from "../schemas/salon.schema";
+import { CreateSalonSchema, SalonDTOType } from "../schemas/salon.schema";
 import { AppDataSource } from "../utils/data-source";
 import { VALID_CATEGORIES } from '../entities/salon.entity';
+import { Gallery } from "../entities/gallery.entity";
 const salonRepository = AppDataSource.getRepository(Salon);
 
 // export const createSalonData = async (input: Salon) => {
@@ -27,6 +28,7 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
   salon.services = [];
   salon.packages = [];
   salon.reviews = [];
+  salon.gallery=[];
 
   // Loop through and save each address, barber, service, package, and review
   for (const addressData of input.addresses) {
@@ -82,18 +84,54 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
       salon.reviews.push(review);
   }
 
+  
+  // Save gallery images
+  for (const galleryData of input.gallery??[]) {
+    const gallery = new Gallery();
+    gallery.imageUrl = galleryData.imageUrl??'';
+    await salonRepository.manager.save(gallery);
+    salon.gallery.push(gallery);
+  }
   // Save the Salon entity
   return await salonRepository.save(salon);
 };
 
-export const getAllSalons = async (): Promise<Salon[]> => {
-    //const salonRepository = getRepository(Salon);
-    return await salonRepository.find({ 
+// export const getAllSalons = async (): Promise<Salon[]> => {
+//     //const salonRepository = getRepository(Salon);
+//     const salons =await salonRepository.find({ 
+//       relations: ['addresses', 'barbers', 'packages', 'reviews', 'services'] 
+//   });
+//   const salonsDTO: SalonDTOType[] = salons.map((salon: any) => ({
+//     name: salon.body.name,
+//     image: salon.body.image,
+//     addresses: salon.body.addresses,
+//     star: salon.body.reviews.map((review: any) => ({ stars: review.stars })),
+// }));
+// return salonsDTO;
+     
+// };
+
+export const getAllSalons = async (): Promise<SalonDTOType[]> => {
+  //const salonRepository = getRepository(Salon); // Get the repository for Salon entity
+  const salons = await salonRepository.find({ 
       relations: ['addresses', 'barbers', 'packages', 'reviews', 'services'] 
   });
-    
-};
 
+  // Transform each Salon entity to SalonDTOType
+  const salonsDTO: SalonDTOType[] = salons.map((salon: Salon) => {
+      // Find the maximum number of stars among all reviews
+      const maxStars = Math.max(...salon.reviews.map(review => review.stars));
+
+      return {
+          name: salon.name,
+          image: salon.image,
+          addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
+          star: { stars: maxStars }, // Send the maximum number of stars as an array with a single object
+      };
+  });
+
+  return salonsDTO;
+};
 
 export const getSalonsByCategory = async (category: string): Promise<Salon[]> => {
   //const salonRepository = getRepository(Salon);

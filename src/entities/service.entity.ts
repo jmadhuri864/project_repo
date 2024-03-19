@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import Model from "./model.entity";
 import { Salon } from "./salon.entity";
+import { Booking } from "./booking.entity";
 
 @Entity("services")
 export class Service extends Model {
@@ -9,4 +10,7 @@ export class Service extends Model {
 
   @ManyToOne(() => Salon, (salon) => salon.services)
   salon: Salon;
+
+  @OneToMany(() => Booking, booking => booking.service)
+  bookings: Booking[];
 }

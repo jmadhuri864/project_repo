@@ -5,6 +5,8 @@ import { Barber } from "./barber.entity";
 import { Service } from "./service.entity";
 import { Package } from "./package.entity";
 import { Review } from "./review.entity";
+import { Gallery } from "./gallery.entity";
+import { Booking } from "./booking.entity";
 
 // Define a constant array of valid categories
 export const VALID_CATEGORIES = ["Haircuts", "Makeup", "Manicure", "Massage","All"];
@@ -38,6 +40,12 @@ export class Salon extends Model {
 
   @OneToMany(() => Review, (review) => review.salon)
   reviews: Review[];
+
+  @OneToMany(() => Booking, booking => booking.salon)
+  bookings: Booking[];
+
+  @OneToMany(() => Gallery, (gallery) => gallery.salon,{nullable:true})
+  gallery: Gallery[]|null; // One salon can have multiple gallery images
 
   // Custom setter to validate categories
   setCategories(categories: string[]) {

@@ -30,6 +30,7 @@ const accessTokenCookieOptions: CookieOptions = {
     Date.now() + config.get<number>('accessTokenExpiresIn') * 60 * 1000
   ),
   maxAge: config.get<number>('accessTokenExpiresIn') * 60 * 1000,
+  
 };
 
 const refreshTokenCookieOptions: CookieOptions = {
@@ -104,8 +105,8 @@ export const loginUserHandler = async (
     res.status(200).json({
       status: 'success',
       access_token,
-      name
-      // refresh_token
+      name,
+       refresh_token
     });
   } catch (err) {
     next(err);
@@ -118,7 +119,7 @@ export const refreshAccessTokenHandler = async (
   next: NextFunction
 ) => {
   try {
-    const refresh_token = req.cookies.refresh_token;
+    const refresh_token = req.params.refresh_token;
 
     const message = 'Could not refresh access token';
 

@@ -13,3 +13,4 @@ export class Address extends Model {
   @ManyToOne(() => Salon, salon => salon.addresses)
   salon: Salon; // Many addresses belong to one salon
 }
+
