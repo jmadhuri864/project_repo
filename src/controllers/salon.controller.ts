@@ -89,12 +89,9 @@ export const getAllSalonhandler = async (
       console.log(Salon.isValidCategory(category))
       const salons = await getSalonsByCategory(category);
 
-      const sanitizedSalons = salons.map(salon => {
-        const { categories, ...sanitizedSalon } = salon;
-        return sanitizedSalon;
-      });
+      console.log("here we all get salons");
   
-      res.status(200).json({salons: sanitizedSalons  });
+      res.status(200).json({salons });
     } catch (error) {
       res.status(400).json({error});
     }

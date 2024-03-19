@@ -133,26 +133,89 @@ export const getAllSalons = async (): Promise<SalonDTOType[]> => {
   return salonsDTO;
 };
 
-export const getSalonsByCategory = async (category: string): Promise<Salon[]> => {
-  //const salonRepository = getRepository(Salon);
+// export const getSalonsByCategory = async (category: string): Promise<SalonDTOType[]> => {
+//   //const salonRepository = getRepository(Salon);
 
-  let salons: Salon[];
+//   let salons: SalonDTOType[];
 
-  if (category === 'All') {
-    // If category is 'All', fetch all salons
-    salons = await salonRepository.find({ relations: ['addresses'] });
-  } else if (Salon.isValidCategory(category)) {
-    // Filter salons based on the specified category
-    salons = await salonRepository.createQueryBuilder('salon')
-    .leftJoinAndSelect('salon.addresses', 'address')
-      .where('LOWER(salon.categories) LIKE LOWER(:category)', { category: `%${category}%` })
-      .getMany();
-  } else {
-    // Invalid category provided
-    throw new Error("Invalid category");
+//   if (category === 'All') {
+//     // If category is 'All', fetch all salons
+//     console.log("all strating")
+//     const salonsEntities = await salonRepository.find({ relations: ['addresses'] });
+//     console.log("this is for all");
+
+//     salons = salonsEntities.map((salon: Salon) => ({
+//       name: salon.name,
+//       image: salon.image,
+//       addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
+//       star: { stars: Math.max(...salon.reviews.map(review => review.stars)) }
+//   }));
+//   } else if (Salon.isValidCategory(category)) {
+//     console.log("hello")
+//     // Filter salons based on the specified category
+//     const salonsEntities = await salonRepository.createQueryBuilder('salon')
+//     .leftJoinAndSelect('salon.addresses', 'address')
+//       .where('LOWER(salon.categories) LIKE LOWER(:category)', { category: `%${category}%` })
+//       .getMany();
+// //console.log("for valid category",salonsEntities)
+//       salons = salonsEntities.map((salon: Salon) => ({
+//         name: salon.name,
+//         image: salon.image,
+//         addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
+//         star: { stars: Math.max(...salon.reviews.map(review => review.stars)) }
+//     }));
+//   } else {
+//     // Invalid category provided
+//     throw new Error("Invalid category");
+//   }
+// console.log("category ",salons)
+//   return salons;
+// };
+
+
+export const getSalonsByCategory = async (category: string): Promise<SalonDTOType[]> => {
+  try {
+    let salons: SalonDTOType[];
+
+    if (category === 'All') {
+      // If category is 'All', fetch all salons
+      console.log("Fetching all salons...");
+      const salonsEntities = await salonRepository.find({ relations: ['addresses', 'reviews'] });
+      console.log("Fetched all salons:", salonsEntities);
+
+      salons = salonsEntities.map((salon: Salon) => ({
+        name: salon.name,
+        image: salon.image,
+        addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
+        star: { stars: Math.max(...salon.reviews.map(review => review.stars)) }
+      }));
+    } else if (Salon.isValidCategory(category)) {
+      console.log("Fetching salons for category:", category);
+      // Filter salons based on the specified category
+      const salonsEntities = await salonRepository.createQueryBuilder('salon')
+        .leftJoinAndSelect('salon.addresses', 'address')
+        .leftJoinAndSelect('salon.reviews', 'review')
+        .where('LOWER(salon.categories) LIKE LOWER(:category)', { category: `%${category}%` })
+        .getMany();
+
+      console.log("Fetched salons for category:", salonsEntities);
+      salons = salonsEntities.map((salon: Salon) => ({
+        name: salon.name,
+        image: salon.image,
+        addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
+        star: { stars: Math.max(...salon.reviews.map(review => review.stars)) }
+      }));
+    } else {
+      // Invalid category provided
+      throw new Error("Invalid category");
+    }
+
+    //console.log("Returning salons:", salons);
+    return salons;
+  } catch (error) {
+    //console.error("Error in getSalonsByCategory:", error);
+    throw error; // Rethrow the error to be caught by the controller
   }
-
-  return salons;
 };
 
 export const getSalonsByName = async (name: string): Promise<any[]> => {
