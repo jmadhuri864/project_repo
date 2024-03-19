@@ -1,7 +1,7 @@
 import { NextFunction,Request,Response } from "express";
 
-import { createSalonData, getAllSalons, getSalonsByCategory} from "../services/salon.service";
-import { CreateSalonSchema} from "../schemas/salon.schema";
+import { createSalonData, getAllSalons, getSalonsByCategory, getSalonsByName} from "../services/salon.service";
+import { CreateSalonSchema, SalonDTOType} from "../schemas/salon.schema";
 import AppError from "../utils/appError";
 import { Salon } from "../entities/salon.entity";
 // import { GetCategorySchema, getCategorySchema } from "../schemas/category.schema";
@@ -96,3 +96,25 @@ export const getAllSalonhandler = async (
       res.status(400).json({error});
     }
   };
+
+  export const getSalonsBySearchController = async (req: Request, res: Response) => {
+    try {
+      //console.log("in search contoller")
+        const name = req.params.name;
+        //console.log(name);
+        const salons: SalonDTOType[] = await getSalonsByName(name);
+        //console.log(salons)
+
+        // If there are no salons found, send a 404 response
+        if (salons.length === 0) {
+            return res.status(404).json({ message: "No salons found for the provided name." });
+        }
+
+        // If salons are found, send them in the response
+        res.status(200).json(salons);
+    } catch (error) {
+        // If an error occurs, send a 500 response with the error message
+        console.error("Error in getSalonsByName:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};

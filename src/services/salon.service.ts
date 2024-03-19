@@ -218,16 +218,32 @@ export const getSalonsByCategory = async (category: string): Promise<SalonDTOTyp
   }
 };
 
-export const getSalonsByName = async (name: string): Promise<any[]> => {
-  let salons: Salon[];
+export const getSalonsByName = async (name: string): Promise<SalonDTOType[]> => {
+  try {
+    let salons: Salon[];
+    //console.log("starting");
 
-  // Assuming you have a repository named salonRepository
-  salons = await salonRepository.createQueryBuilder('salon')
-  .leftJoinAndSelect('salon.addresses', 'address')
-    .where('LOWER(salon.name) LIKE LOWER(:startsWith)', { startsWith: `${name}%` }) // Name starts with provided string
-    .orWhere('LOWER(salon.name) LIKE LOWER(:endsWith)', { endsWith: `%${name}` }) // Name ends with provided string
-    .orWhere('LOWER(salon.name) LIKE LOWER(:contains)', { contains: `%${name}%` }) // Name contains provided string
-    .getMany();
+    // Assuming you have a repository named salonRepository
+    salons = await salonRepository.createQueryBuilder('salon')
+      .leftJoinAndSelect('salon.addresses', 'address')
+      .where('LOWER(salon.name) LIKE LOWER(:startsWith)', { startsWith: `${name}%` }) // Name starts with provided string
+      .orWhere('LOWER(salon.name) LIKE LOWER(:endsWith)', { endsWith: `%${name}` }) // Name ends with provided string
+      .orWhere('LOWER(salon.name) LIKE LOWER(:contains)', { contains: `%${name}%` }) // Name contains provided string
+      .getMany();
 
-  return salons;
+    //console.log("after query");
+    const salonDTOs: SalonDTOType[] = salons.map((salon: Salon) => ({
+      name: salon.name,
+      image: salon.image,
+      addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
+      star: { stars: salon.reviews ? Math.max(...salon.reviews.map(review => review.stars)) : 0 }
+    }));
+    //console.log("before return");
+
+    //console.log(salonDTOs);
+    return salonDTOs;
+  } catch (error) {
+    console.error("Error in getSalonsByName:", error);
+    throw error;
+  }
 };
