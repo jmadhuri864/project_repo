@@ -1,4 +1,5 @@
 import express from 'express';
+
 import {
   loginUserHandler,
   logoutHandler,
@@ -13,6 +14,7 @@ import { userProfileCreateHandler } from '../controllers/userProfile.controller'
 import { createProfileSchema } from '../schemas/userProfile.schema';
 import { uploadPostImageDisk } from '../upload/single-upload-disk';
 import { resizePostImage, uploadPostImage } from '../upload/single-upload-sharp';
+import passport from 'passport';
 
 const router = express.Router();
 router.route('/register').post(uploadPostImage,
@@ -42,5 +44,12 @@ router.get('/logout', deserializeUser, requireUser, logoutHandler);
 
 // Refresh access token
 router.get('/refresh/:refresh_token', refreshAccessTokenHandler);
+
+router.get('/google', passport.authenticate('google'), (req, res) =>
+  res.sendStatus(200)
+);
+router.get('/google/callback', passport.authenticate('google'), (req, res) =>
+  res.sendStatus(200)
+);
 
 export default router;

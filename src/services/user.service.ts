@@ -8,6 +8,7 @@ import { signJwt } from '../utils/jwt';
 const userRepository = AppDataSource.getRepository(User);
 
 export const createUser = async (input: DeepPartial<User>) => {
+  
   return userRepository.save(userRepository.create(input));
 };
 

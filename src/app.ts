@@ -1,6 +1,8 @@
 import * as dotenv from "dotenv";
 dotenv.config(); // Load environment variables from .env file
+import passport from 'passport'
 
+import session from 'express-session';
 import express, { NextFunction, Request, Response } from "express";
 import config from "config";
 import morgan from "morgan";
@@ -15,19 +17,36 @@ import profileRouter from "./routes/profile.routes";
 import validateEnv from "./utils/validateEnv";
 import redisClient from "./utils/connectRedis";
 
+require('./strategies/google');
 AppDataSource.initialize()
   .then(async () => {
     // VALIDATE ENV
     validateEnv();
 
     const app = express();
-
+    
     // TEMPLATE ENGINE
     app.set("view engine", "pug");
     app.set("views", `${__dirname}/views`);
-
+    // app.use(
+    //   cookieSession({
+    //     maxAge: 30 * 86400 * 1000, // expire in 30 days(milli seconds)
+    //     keys:[keys.cookieKey]
+    //   })
+    // );
+    app.use(session({
+      secret: 'your_secret_here', // Set a secret for session management
+      resave: false,
+      saveUninitialized: true
+    }));
+    
+    
     // MIDDLEWARE
     // 1. Body parser
+    app.use(passport.initialize());
+    console.log('Passport initialized');
+    app.use(passport.session());
+    
     app.use(express.json({ limit: "10kb" }));
 
     // 2. Logger
@@ -62,6 +81,9 @@ AppDataSource.initialize()
 //app.options('*', cors());
 
 
+console.log(process.env.GOOGLE_REDIRECT_URL)
+
+
     // ROUTES
     app.use("/api/auth", authRouter);
     app.use("/api/users", userRouter);
@@ -88,17 +110,17 @@ AppDataSource.initialize()
     });
 
     // GLOBAL ERROR HANDLER
-    app.use(
-      (error: AppError, req: Request, res: Response, next: NextFunction) => {
-        error.status = error.status || "error";
-        error.statusCode = error.statusCode || 500;
-
-        res.status(error.statusCode).json({
-          status: error.status,
-          message: error.message,
-        });
-      }
-    );
+//     app.use(
+//       (error: AppError, req: Request, res: Response, next: NextFunction) => {
+//         error.status = error.status || "error";
+//         error.statusCode = error.statusCode || 500;
+// console.log(error);
+//         res.status(error.statusCode).json({
+//           status: error.status,
+//           message: error.message,
+//         });
+//       }
+//     );
 
     const port = config.get<number>("port");
     app.listen(port);

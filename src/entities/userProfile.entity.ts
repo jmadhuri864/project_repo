@@ -12,16 +12,16 @@ export class UserProfile extends Model {
     @Column()
     nickname: string;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'date',nullable:true })
     dateOfBirth: Date;
 
     @Column()
     email: string;
 
-    @Column()
+    @Column({nullable:true })
     mobileNumber: string;
 
-    @Column()
+    @Column({nullable:true} )
     gender: string;
 
     @Column({ default: 'default.jpeg' })

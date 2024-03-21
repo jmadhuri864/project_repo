@@ -18,7 +18,7 @@ export class User extends Model {
   })
   email: string;
 
-  @Column()
+  @Column({nullable:true})
   password: string;
 
   @Column({
@@ -32,7 +32,8 @@ export class User extends Model {
   profile: UserProfile;
 
   @BeforeInsert()
-  async hashPassword() {
+  async hashPassword() 
+  {if(this.password)
     this.password = await bcrypt.hash(this.password, 12);
   }
 
