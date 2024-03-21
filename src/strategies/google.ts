@@ -4,14 +4,13 @@ import { User } from '../entities/user.entity';
 import { UserProfile } from '../entities/userProfile.entity';
 import { createUser } from '../services/user.service';
 import { createProfile } from '../services/userProfile.service';
-import { any } from 'zod';
 // Assuming you have a service to handle profile creation
 
 // Serialize and deserialize user for session management
 passport.serializeUser((user: any, done) => {
     try {
         // Ensure user object has an 'id' property
-        if (!user.id) {
+        if (!user||!user.id) {
             throw new Error('User object does not have an id property');
         }
         // Serialize user with user id
@@ -23,9 +22,9 @@ passport.serializeUser((user: any, done) => {
     }
 });
 
-passport.deserializeUser(async (id: string, done) => {
+passport.deserializeUser(async (email: string, done) => {
     try {
-        const user = await User.findOneById(id);
+        const user = await User.findOneBy({email});
         done(null, user);
     } catch (error) {
         done(error);
@@ -47,6 +46,7 @@ passport.use(
             done: VerifyCallback
         ) => {
             try {
+                console.log(refreshToken)
                 // Extract email from the profile
                 const email = profile.emails?.[0]?.value;
     
@@ -77,7 +77,7 @@ passport.use(
                 }
     
                 // Call done to indicate successful authentication and pass the user object
-                done(null, user);
+                done(null,user,accessToken);
             } catch (error:any) {
                 // If an error occurs during the authentication process, call done with the error
                 console.error('Error during Google OAuth authentication:', error);

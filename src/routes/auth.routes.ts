@@ -16,6 +16,8 @@ import { uploadPostImageDisk } from '../upload/single-upload-disk';
 import { resizePostImage, uploadPostImage } from '../upload/single-upload-sharp';
 import passport from 'passport';
 
+
+
 const router = express.Router();
 router.route('/register').post(uploadPostImage,
   resizePostImage,validate(createProfileSchema),userProfileCreateHandler)
@@ -48,8 +50,22 @@ router.get('/refresh/:refresh_token', refreshAccessTokenHandler);
 router.get('/google', passport.authenticate('google'), (req, res) =>
   res.sendStatus(200)
 );
-router.get('/google/callback', passport.authenticate('google'), (req, res) =>
-  res.sendStatus(200)
+router.get('/google/callback', passport.authenticate('google',{ failureRedirect: '/api/auth/google/error'}), 
+(req, res) =>{
+
+  res.redirect('/api/auth/google/success');
+
+}
 );
 
+router.get('/google/success', async (req, res) => {
+  // Handle successful authentication
+ 
+  
+  // const accessToken = req.session?.passport?.user?.accessToken;
+  //   const refreshToken = req.session?.passport?.user?.refreshToken;
+  res.sendStatus(200)
+});
+
+router.get('/google/error', (req, res) => res.send('Error logging in via Google..'));
 export default router;
