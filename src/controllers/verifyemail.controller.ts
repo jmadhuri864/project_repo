@@ -45,7 +45,9 @@ export const verifyotpviaemailhandler = async (
     res: Response,
     next: NextFunction
 ) => {
+    console.log("in verfify otp controller")
     try {
+        console.log(req.body)
         const { email, otp } = req.body;
         if (!(email && otp)) {
             return next(new AppError(404, 'Empty OTP details are not allowed'));

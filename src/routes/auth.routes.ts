@@ -98,5 +98,5 @@ router.post('/requestOTP' ,requestForNewOTPHandller)
 router.post('/verifyOTP',verifyotp)
 
 router.post('/sendOTPByEmail',verifyemailhandler)
-router.post('/verifyOTP',verifyotpviaemailhandler)
+router.post('/verifyOTPSendByEmail',verifyotpviaemailhandler)
 export default router;
