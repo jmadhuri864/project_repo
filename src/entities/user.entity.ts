@@ -9,6 +9,7 @@ import {
 import bcrypt from "bcryptjs";
 import Model from "./model.entity";
 import { UserProfile } from "./userProfile.entity";
+import { OTPclass } from "./otp.entity";
 
 @Entity("users")
 export class User extends Model {
@@ -26,6 +27,9 @@ export class User extends Model {
   })
   verified: boolean;
 
+  @OneToOne(() => OTPclass)
+  @JoinColumn()
+  otp: OTPclass;
   
   @OneToOne(() => UserProfile)
   @JoinColumn()

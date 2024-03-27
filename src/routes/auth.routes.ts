@@ -15,6 +15,8 @@ import { createProfileSchema } from '../schemas/userProfile.schema';
 import { uploadPostImageDisk } from '../upload/single-upload-disk';
 import { resizePostImage, uploadPostImage } from '../upload/single-upload-sharp';
 import passport from 'passport';
+import { requestForNewOTPHandller, verifyotp } from '../controllers/otp.controller';
+import { verifyemailhandler, verifyotpviaemailhandler } from '../controllers/verifyemail.controller';
 
 
 
@@ -91,4 +93,10 @@ router.get('/facebook/success', async (req, res) => {
 router.get('/facebook/error', (req, res) => res.send('Error logging in via facebook..'));
 
 
+router.post('/requestOTP' ,requestForNewOTPHandller)
+
+router.post('/verifyOTP',verifyotp)
+
+router.post('/sendOTPByEmail',verifyemailhandler)
+router.post('/verifyOTP',verifyotpviaemailhandler)
 export default router;

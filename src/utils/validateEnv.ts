@@ -21,6 +21,9 @@ const validateEnv = () => {
     EMAIL_HOST: str(),
     EMAIL_PORT: port(),
 
+    AUTH_EMAIL:str(),
+    AUTH_PASS:str()
+
   });
 };
 
