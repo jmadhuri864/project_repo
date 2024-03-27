@@ -57,7 +57,6 @@ router.get('/google/callback', passport.authenticate('google',{ failureRedirect:
 
 }
 );
-
 router.get('/google/success', async (req, res) => {
   // Handle successful authentication
  
@@ -68,4 +67,28 @@ router.get('/google/success', async (req, res) => {
 });
 
 router.get('/google/error', (req, res) => res.send('Error logging in via Google..'));
+
+
+router.get('/facebook', passport.authenticate('facebook'), (req, res) =>
+  res.sendStatus(200)
+);
+router.get('/facebook/callback', passport.authenticate('facebook',{ failureRedirect: '/api/auth/facebook/error'}), 
+(req, res) =>{
+  res.send("Facebook authentication callback");
+  res.redirect('/api/auth/facebook/success');
+
+}
+);
+router.get('/facebook/success', async (req, res) => {
+  // Handle successful authentication
+ 
+  
+  // const accessToken = req.session?.passport?.user?.accessToken;
+  //   const refreshToken = req.session?.passport?.user?.refreshToken;
+  res.sendStatus(200)
+});
+
+router.get('/facebook/error', (req, res) => res.send('Error logging in via facebook..'));
+
+
 export default router;

@@ -18,6 +18,7 @@ import validateEnv from "./utils/validateEnv";
 import redisClient from "./utils/connectRedis";
 
 require('./strategies/google');
+require('./strategies/facebook');
 AppDataSource.initialize()
   .then(async () => {
     // VALIDATE ENV
