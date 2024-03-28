@@ -101,7 +101,7 @@ export const verifyotpviaemailhandler = async (
                     status: 'success',
                     message: 'Password reset email sent successfully.',
                     resetToken,
-                    user1
+                    //user1
                 });
             } catch (err: any) {
                 await updateUser(
@@ -157,7 +157,16 @@ console.log(passwordResetToken)
       user.passwordResetToken = null;
       user.passwordResetAt = null;
       await User.save(user);
-  
+      const email = user.email; // Retrieve the user's email
+      const url = `${config.get<string>('origin')}/login`; // URL to redirect after password reset
+      const mailOptions = {
+          from: process.env.AUTH_EMAIL,
+          to: email,
+          subject: 'Password Reset Successfully',
+          text: `Your password has been successfully updated.\n\nYou can now login using your new password.\n\nIf you did not initiate this action, please contact us immediately.\n`,
+      };
+      await sendEmail(mailOptions);
+
       //logout(res);
       res.status(200).json({
         status: 'success',
