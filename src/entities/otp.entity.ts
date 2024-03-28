@@ -10,6 +10,6 @@ export class OTPclass extends Model {
 email:string
 @Column({nullable:true})
 expiresAt:Date
-  @OneToOne(() => User, (user) => user.otp)
-  user: User;
+//   @OneToOne(() => User, (user) => user.otp)
+//   user: User;
 }

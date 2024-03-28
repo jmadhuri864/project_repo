@@ -9,14 +9,14 @@ import {
 import { deserializeUser } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
 import { validate } from '../middleware/validate';
-import { createUserSchema,  loginUserSchema} from '../schemas/user.schema';
+import { createUserSchema,  loginUserSchema, resetPasswordSchema} from '../schemas/user.schema';
 import { userProfileCreateHandler } from '../controllers/userProfile.controller';
 import { createProfileSchema } from '../schemas/userProfile.schema';
 import { uploadPostImageDisk } from '../upload/single-upload-disk';
 import { resizePostImage, uploadPostImage } from '../upload/single-upload-sharp';
 import passport from 'passport';
 import { requestForNewOTPHandller, verifyotp } from '../controllers/otp.controller';
-import { verifyemailhandler, verifyotpviaemailhandler } from '../controllers/verifyemail.controller';
+import { resetPasswordHandler, verifyemailhandler, verifyotpviaemailhandler } from '../controllers/verifyemail.controller';
 
 
 
@@ -99,4 +99,6 @@ router.post('/verifyOTP',verifyotp)
 
 router.post('/sendOTPByEmail',verifyemailhandler)
 router.post('/verifyOTPSendByEmail',verifyotpviaemailhandler)
+
+router.patch('/resetpassword/:resetToken',validate(resetPasswordSchema),resetPasswordHandler)
 export default router;

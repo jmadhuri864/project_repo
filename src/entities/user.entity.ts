@@ -27,9 +27,18 @@ export class User extends Model {
   })
   verified: boolean;
 
-  @OneToOne(() => OTPclass)
-  @JoinColumn()
-  otp: OTPclass;
+  @Column({nullable:true, type: 'varchar' })
+  provider:string|null
+
+  @Column({nullable:true,type: 'varchar' })
+  passwordResetToken:string|null
+
+  @Column({nullable:true, type: 'timestamptz'})
+  passwordResetAt:Date|null
+
+  // @OneToOne(() => OTPclass)
+  // @JoinColumn()
+  // otp: OTPclass;
   
   @OneToOne(() => UserProfile)
   @JoinColumn()
