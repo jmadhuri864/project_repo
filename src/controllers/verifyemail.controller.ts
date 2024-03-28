@@ -49,6 +49,76 @@ export const verifyemailhandler = async (
 
 
 
+// export const verifyotpviaemailhandler = async (
+//     req: Request,
+//     res: Response,
+//     next: NextFunction
+// ) => {
+//     console.log('in verify otp controller');
+//     try {
+//         //console.log(req.body);
+//         const { email, otp } = req.body;
+//         if (!(email && otp)) {
+//             return next(new AppError(404, 'Empty OTP details are not allowed'));
+//         } else {
+//             const validOTP = await verifyotp(req, res, next); // Corrected
+//             if (!validOTP) {
+//                 return next(new AppError(404, 'Invalid code passed. Check your inbox.'));
+//             }
+//             // Fetch user from the database based on the email
+//             const user = await User.findBy({ email });
+            
+//             //console.log(user);
+//             if (!user) {
+//                 return next(new AppError(404, 'User not found'));
+//             }
+//             const resetToken = crypto.randomBytes(32).toString('hex');
+//             const passwordResetToken = crypto
+//                 .createHash('sha256')
+//                 .update(resetToken)
+//                 .digest('hex');
+//                 const userId = user[0].id;
+//                 //console.log("This is user ID",userId)
+//             const user1=await updateUser(
+//                 { id:userId },
+//                 {
+//                     passwordResetToken,
+//                     passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
+//                 }
+//             );
+
+//             try {
+//                 const url = `${config.get<string>('origin')}/resetPassword/${resetToken}`;
+//                 const mailOptions = {
+//                     from: process.env.AUTH_EMAIL,
+//                     to: email,
+//                     subject: 'Password Reset',
+//                     text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n${url}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n`,
+//                 };
+//                 await sendEmail(mailOptions);
+
+//                 res.status(200).json({
+//                     status: 'success',
+//                     message: 'Password reset email sent successfully.',
+//                     resetToken,
+//                     //user1
+//                 });
+//             } catch (err: any) {
+//                 await updateUser(
+//                     { id: userId },
+//                     { passwordResetToken: null, passwordResetAt: null }
+//                 );
+//                 return res.status(500).json({
+//                     status: 'error',
+//                     message: 'There was an error sending email',
+//                 });
+//             }
+//         }
+//     } catch (error) {
+//         next(error); // Handle errors that occur during the verification process
+//     }
+// };
+
 export const verifyotpviaemailhandler = async (
     req: Request,
     res: Response,
@@ -77,48 +147,26 @@ export const verifyotpviaemailhandler = async (
                 .createHash('sha256')
                 .update(resetToken)
                 .digest('hex');
-                const userId = user[0].id;
-                //console.log("This is user ID",userId)
-            const user1=await updateUser(
-                { id:userId },
+            const userId = user[0].id;
+            //console.log("This is user ID",userId)
+            await updateUser(
+                { id: userId },
                 {
                     passwordResetToken,
                     passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
                 }
             );
 
-            try {
-                const url = `${config.get<string>('origin')}/resetPassword/${resetToken}`;
-                const mailOptions = {
-                    from: process.env.AUTH_EMAIL,
-                    to: email,
-                    subject: 'Password Reset',
-                    text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n${url}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n`,
-                };
-                await sendEmail(mailOptions);
-
-                res.status(200).json({
-                    status: 'success',
-                    message: 'Password reset email sent successfully.',
-                    resetToken,
-                    //user1
-                });
-            } catch (err: any) {
-                await updateUser(
-                    { id: userId },
-                    { passwordResetToken: null, passwordResetAt: null }
-                );
-                return res.status(500).json({
-                    status: 'error',
-                    message: 'There was an error sending email',
-                });
-            }
+            res.status(200).json({
+                status: 'success',
+                message: 'Password reset token generated successfully.',
+                resetToken,
+            });
         }
     } catch (error) {
         next(error); // Handle errors that occur during the verification process
     }
 };
-
 
 
 export const resetPasswordHandler = async (
