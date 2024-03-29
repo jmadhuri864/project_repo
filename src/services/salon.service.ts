@@ -123,6 +123,7 @@ export const getAllSalons = async (): Promise<SalonDTOType[]> => {
       const maxStars = Math.max(...salon.reviews.map(review => review.stars));
 
       return {
+        id:salon.id,
           name: salon.name,
           image: salon.image,
           addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
@@ -184,6 +185,7 @@ export const getSalonsByCategory = async (category: string): Promise<SalonDTOTyp
       console.log("Fetched all salons:", salonsEntities);
 
       salons = salonsEntities.map((salon: Salon) => ({
+        id:salon.id,
         name: salon.name,
         image: salon.image,
         addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
@@ -200,6 +202,7 @@ export const getSalonsByCategory = async (category: string): Promise<SalonDTOTyp
 
       console.log("Fetched salons for category:", salonsEntities);
       salons = salonsEntities.map((salon: Salon) => ({
+        id:salon.id,
         name: salon.name,
         image: salon.image,
         addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
@@ -233,6 +236,7 @@ export const getSalonsByName = async (name: string): Promise<SalonDTOType[]> => 
 
     //console.log("after query");
     const salonDTOs: SalonDTOType[] = salons.map((salon: Salon) => ({
+      id:salon.id,
       name: salon.name,
       image: salon.image,
       addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),

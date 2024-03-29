@@ -13,6 +13,7 @@ import AppError from "./utils/appError";
 import authRouter from "./routes/auth.routes";
 import userRouter from "./routes/user.routes";
 import salonRouter from "./routes/salon.routes";
+import bookmarkRouter from "./routes/bookmark.routes"
 import profileRouter from "./routes/profile.routes";
 import validateEnv from "./utils/validateEnv";
 import redisClient from "./utils/connectRedis";
@@ -90,6 +91,7 @@ console.log(process.env.GOOGLE_REDIRECT_URL)
     app.use("/api/users", userRouter);
     app.use("/api/profile", profileRouter);
     app.use("/api/salon", salonRouter);
+    app.use("/api/bookmark",bookmarkRouter)
 
     //HEALTH CHECKER
     app.get("/api/healthchecker", async (_, res: Response) => {
@@ -111,17 +113,17 @@ console.log(process.env.GOOGLE_REDIRECT_URL)
     });
 
     // GLOBAL ERROR HANDLER
-//     app.use(
-//       (error: AppError, req: Request, res: Response, next: NextFunction) => {
-//         error.status = error.status || "error";
-//         error.statusCode = error.statusCode || 500;
-// console.log(error);
-//         res.status(error.statusCode).json({
-//           status: error.status,
-//           message: error.message,
-//         });
-//       }
-//     );
+    app.use(
+      (error: AppError, req: Request, res: Response, next: NextFunction) => {
+        error.status = error.status || "error";
+        error.statusCode = error.statusCode || 500;
+console.log(error);
+        res.status(error.statusCode).json({
+          status: error.status,
+          message: error.message,
+        });
+      }
+    );
 
     const port = config.get<number>("port");
     app.listen(port);

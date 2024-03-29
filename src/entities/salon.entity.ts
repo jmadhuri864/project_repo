@@ -25,6 +25,10 @@ export class Salon extends Model {
 
   @Column({ type: "simple-array" })
   categories: string[]=[];
+
+
+  @Column({ default: false ,nullable:true})
+    bookmarked: boolean;
   
   @OneToMany(() => Address, (address) => address.salon)
   addresses: Address[]; // One salon can have multiple addresses (branches)

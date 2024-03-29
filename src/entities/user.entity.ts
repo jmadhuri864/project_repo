@@ -5,11 +5,13 @@ import {
   BeforeInsert,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 import bcrypt from "bcryptjs";
 import Model from "./model.entity";
 import { UserProfile } from "./userProfile.entity";
 import { OTPclass } from "./otp.entity";
+import { Bookmark } from "./bookmark.entity";
 
 @Entity("users")
 export class User extends Model {
@@ -26,6 +28,9 @@ export class User extends Model {
     default: true,
   })
   verified: boolean;
+
+
+ 
 
   @Column({nullable:true, type: 'varchar' })
   provider:string|null

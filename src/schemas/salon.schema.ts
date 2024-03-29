@@ -53,6 +53,7 @@ export const createSalonSchema = object({
 });
 
 export const SalonDTO = object({
+    id:string(),
     name: string(),
     image: string(),
     addresses: array(AddressSchema),
