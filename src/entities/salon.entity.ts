@@ -12,6 +12,7 @@ import { Booking } from "./booking.entity";
 export const VALID_CATEGORIES = ["Haircuts", "Makeup", "Manicure", "Massage","All"];
 @Entity("salon")
 export class Salon extends Model {
+  
   @Column()
   name: string;
 

@@ -1,4 +1,4 @@
-import { object, string, array, nullable, number, TypeOf } from "zod";
+import { object, string, array, nullable, number, TypeOf, boolean } from "zod";
 
 // Define the schema for the Address entity
 const AddressSchema = object({
@@ -41,6 +41,7 @@ export const createSalonSchema = object({
     body: object({
         name: string(),
         contactno: string(),
+        bookmarked:boolean(),
         image:string(),
         categories: array(string()).nullable(),
         addresses: array(AddressSchema),
@@ -54,6 +55,7 @@ export const createSalonSchema = object({
 
 export const SalonDTO = object({
     id:string(),
+    bookmarked:boolean(),
     name: string(),
     image: string(),
     addresses: array(AddressSchema),

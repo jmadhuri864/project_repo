@@ -20,6 +20,7 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
   // Create a new Salon instance
   const salon = new Salon();
   salon.name = input.name;
+  salon.bookmarked=input.bookmarked;
   salon.contactno = input.contactno;
   salon.image=input.image;
   salon.categories = categories;
@@ -127,7 +128,8 @@ export const getAllSalons = async (): Promise<SalonDTOType[]> => {
           name: salon.name,
           image: salon.image,
           addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
-          star: { stars: maxStars }, // Send the maximum number of stars as an array with a single object
+          star: { stars: maxStars },
+          bookmarked:salon.bookmarked // Send the maximum number of stars as an array with a single object
       };
   });
 
@@ -189,7 +191,8 @@ export const getSalonsByCategory = async (category: string): Promise<SalonDTOTyp
         name: salon.name,
         image: salon.image,
         addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
-        star: { stars: Math.max(...salon.reviews.map(review => review.stars)) }
+        star: { stars: Math.max(...salon.reviews.map(review => review.stars)) },
+        bookmarked:salon.bookmarked
       }));
     } else if (Salon.isValidCategory(category)) {
       console.log("Fetching salons for category:", category);
@@ -206,7 +209,8 @@ export const getSalonsByCategory = async (category: string): Promise<SalonDTOTyp
         name: salon.name,
         image: salon.image,
         addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
-        star: { stars: Math.max(...salon.reviews.map(review => review.stars)) }
+        star: { stars: Math.max(...salon.reviews.map(review => review.stars)) },
+        bookmarked:salon.bookmarked
       }));
     } else {
       // Invalid category provided
@@ -240,7 +244,8 @@ export const getSalonsByName = async (name: string): Promise<SalonDTOType[]> => 
       name: salon.name,
       image: salon.image,
       addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
-      star: { stars: salon.reviews ? Math.max(...salon.reviews.map(review => review.stars)) : 0 }
+      star: { stars: salon.reviews ? Math.max(...salon.reviews.map(review => review.stars)) : 0 },
+      bookmarked:salon.bookmarked
     }));
     //console.log("before return");
 
@@ -250,4 +255,30 @@ export const getSalonsByName = async (name: string): Promise<SalonDTOType[]> => 
     console.error("Error in getSalonsByName:", error);
     throw error;
   }
+};
+
+
+export const getSalonsbYBookmark = async (): Promise<SalonDTOType[]> => {
+  //const salonRepository = getRepository(Salon); // Get the repository for Salon entity
+  const salons = await salonRepository.find({ 
+      relations: ['addresses', 'barbers', 'packages', 'reviews', 'services'],
+      where: { bookmarked: true } // Filter salons where bookmarked is true
+  });
+console.log(salons);
+  // Transform each Salon entity to SalonDTOType
+  const salonsDTO: SalonDTOType[] = salons.map((salon: Salon) => {
+      // Find the maximum number of stars among all reviews
+      const maxStars = Math.max(...salon.reviews.map(review => review.stars));
+
+      return {
+        id:salon.id,
+          name: salon.name,
+          image: salon.image,
+          addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
+          star: { stars: maxStars }, // Send the maximum number of stars as an array with a single object
+          bookmarked:salon.bookmarked
+      };
+  });
+
+  return salonsDTO;
 };
