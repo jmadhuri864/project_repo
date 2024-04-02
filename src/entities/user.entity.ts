@@ -11,7 +11,7 @@ import bcrypt from "bcryptjs";
 import Model from "./model.entity";
 import { UserProfile } from "./userProfile.entity";
 import { OTPclass } from "./otp.entity";
-import { Bookmark } from "./bookmark.entity";
+
 
 @Entity("users")
 export class User extends Model {
@@ -59,7 +59,18 @@ export class User extends Model {
     candidatePassword: string,
     hashedPassword: string
   ) {
-    return await bcrypt.compare(candidatePassword, hashedPassword);
+    // Ensure both candidatePassword and hashedPassword are not null or undefined
+  if (!candidatePassword || !hashedPassword) {
+    throw new Error('Invalid candidate or hashed password');
+  }
+
+  // Log or debug the values of candidatePassword and hashedPassword
+  console.log('Candidate Password:', candidatePassword);
+  console.log('Hashed Password:', hashedPassword);
+
+  // Perform password comparison
+  return await bcrypt.compare(candidatePassword, hashedPassword);
+    //return await bcrypt.compare(candidatePassword, hashedPassword);
   }
 
   toJSON() {
