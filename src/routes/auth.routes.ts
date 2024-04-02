@@ -63,7 +63,7 @@ router.get('/google/callback', passport.authenticate('google',{ failureRedirect:
   //res.sendStatus(200)
   res.status(200).json({
     status: 'ok',
-    data :user,access_token
+    user,access_token
   });
   
   //res.redirect('/api/auth/google/success');
@@ -81,7 +81,7 @@ router.get('/google/success', async (req, res) => {
   //   const refreshToken = req.session?.passport?.user?.refreshToken;
    res.status(200).json({
     status: 'ok',
-    data :user,access_token
+    user,access_token
   });
 });
 
