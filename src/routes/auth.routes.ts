@@ -55,11 +55,16 @@ router.get('/google', passport.authenticate('google'), (req, res) =>
 router.get('/google/callback', passport.authenticate('google',{ failureRedirect: '/api/auth/google/error'}), 
 (req, res) =>{
   const user = req.user;
-  const accessToken = req.authInfo;
+  const access_token = req.authInfo;
+  
   console.log("User:", user);
-  console.log("Access Token:", accessToken);
+  console.log("Access Token:", access_token);
 
-  res.sendStatus(200)
+  //res.sendStatus(200)
+  res.status(200).json({
+    status: 'ok',
+    data :user,access_token
+  });
   
   //res.redirect('/api/auth/google/success');
 
@@ -68,13 +73,16 @@ router.get('/google/callback', passport.authenticate('google',{ failureRedirect:
 router.get('/google/success', async (req, res) => {
   // Handle successful authentication
   const user = req.user;
-  const accessToken = req.authInfo;
+  const access_token = req.authInfo;
   console.log("User:", user);
-  console.log("Access Token:", accessToken);
+  console.log("Access Token:", access_token);
   
   // const accessToken = req.session?.passport?.user?.accessToken;
   //   const refreshToken = req.session?.passport?.user?.refreshToken;
-  res.sendStatus(200)
+   res.status(200).json({
+    status: 'ok',
+    data :user,access_token
+  });
 });
 
 router.get('/google/error', (req, res) => res.send('Error logging in via Google..'));

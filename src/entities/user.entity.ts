@@ -65,8 +65,8 @@ export class User extends Model {
   }
 
   // Log or debug the values of candidatePassword and hashedPassword
-  console.log('Candidate Password:', candidatePassword);
-  console.log('Hashed Password:', hashedPassword);
+  //console.log('Candidate Password:', candidatePassword);
+  //console.log('Hashed Password:', hashedPassword);
 
   // Perform password comparison
   return await bcrypt.compare(candidatePassword, hashedPassword);

@@ -3,7 +3,8 @@ import Model from "./model.entity";
 import { User } from "./user.entity";
 
 @Entity("otp")
-export class OTPclass extends Model {
+export class OTPclass extends Model 
+{
   @Column()
   otp: string;
 @Column()
