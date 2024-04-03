@@ -22,7 +22,9 @@ const validateEnv = () => {
     EMAIL_PORT: port(),
 
     AUTH_EMAIL:str(),
-    AUTH_PASS:str()
+    AUTH_PASS:str(),
+
+    GOOGLE_MAP_KEY:str()
 
   });
 };
