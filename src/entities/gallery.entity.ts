@@ -3,7 +3,8 @@ import Model from "./model.entity";
 import { Salon } from "./salon.entity";
 
 @Entity("gallery")
-export class Gallery extends Model {
+export class Gallery extends Model 
+{
   @Column()
   imageUrl: string;
 

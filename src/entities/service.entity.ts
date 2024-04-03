@@ -4,7 +4,8 @@ import { Salon } from "./salon.entity";
 import { Booking } from "./booking.entity";
 
 @Entity("services")
-export class Service extends Model {
+export class Service extends Model 
+{
   @Column()
   name: string;
 

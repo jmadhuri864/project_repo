@@ -3,7 +3,8 @@ import { User } from "./user.entity";
 import Model from "./model.entity";
 
 @Entity("profile")
-export class UserProfile extends Model {
+export class UserProfile extends Model
+ {
     
 
     @Column()

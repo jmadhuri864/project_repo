@@ -11,7 +11,8 @@ import { Booking } from "./booking.entity";
 // Define a constant array of valid categories
 export const VALID_CATEGORIES = ["Haircuts", "Makeup", "Manicure", "Massage","All"];
 @Entity("salon")
-export class Salon extends Model {
+export class Salon extends Model
+ {
   
   @Column()
   name: string;
