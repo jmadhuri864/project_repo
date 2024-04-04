@@ -3,6 +3,7 @@ import Model from "./model.entity";
 import { Salon } from "./salon.entity";
 import { Service } from "./service.entity";
 import { Barber } from "./barber.entity";
+import { Package } from "./package.entity";
 
 
 
@@ -13,7 +14,8 @@ export class Booking extends Model
 {
  @Column()
   date: Date;
-
+  @Column()
+  time: string; 
   @ManyToOne(() => Salon, salon => salon.bookings)
   salon: Salon;
 
@@ -23,7 +25,8 @@ export class Booking extends Model
   @ManyToOne(()=>Barber,barber=>barber.bookings)
   barber:Barber;
 
-  //@ManyToOne(()=>Package,package=>package.)
+  @ManyToOne(()=>Package,packages=>packages.bookings)
+  package: Package;
 
 
 }
