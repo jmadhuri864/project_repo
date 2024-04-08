@@ -110,7 +110,8 @@ router.get('/google/success', async (req, res) => {
   //   status: 'ok',
   //   user,access_token
   // });
-  res.sendStatus(200)
+  //res.sendStatus(200)
+  res.redirect('casca-salon-app.vercel.app/dashboard')
 });
 
 router.get('/google/error', (req, res) => res.send('Error logging in via Google..'));
