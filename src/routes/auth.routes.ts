@@ -78,7 +78,7 @@ router.get('/google', passport.authenticate('google'), (req, res) =>
 //   })(req, res, next);
 // });
 
-router.get('/google/callback', passport.authenticate('google',{successRedirect:'/api/auth/google/success', failureRedirect: '/api/auth/google/error'}), 
+router.get('/google/callback', passport.authenticate('google',{ failureRedirect: '/api/auth/google/error'}), 
 (req, res) =>{
   const user = req.user;
   const access_token = req.authInfo;
@@ -92,7 +92,7 @@ router.get('/google/callback', passport.authenticate('google',{successRedirect:'
     status: 'ok',
     user,access_token
   });
-  
+  res.redirect('https://casca-salon-app.vercel.app/dashboard')
   //res.redirect('/api/auth/google/success');
 
 }
