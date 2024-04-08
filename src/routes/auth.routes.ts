@@ -50,9 +50,35 @@ router.get('/logout', deserializeUser, requireUser, logoutHandler);
 router.get('/refresh/:refresh_token', refreshAccessTokenHandler);
 
 router.get('/google', passport.authenticate('google'), (req, res) =>
+
   res.sendStatus(200)
+  
 );
-router.get('/google/callback', passport.authenticate('google',{ failureRedirect: '/api/auth/google/error'}), 
+// router.get('/google', (req, res, next) => {
+//   passport.authenticate('google', {
+//     successRedirect: '/api/auth/google/callback',
+//     failureRedirect: '/api/auth/google/error'
+//   })(req, res, next);
+// });
+// router.get('/google', (req, res, next) => {
+//   passport.authenticate('google', {successRedirect:'/api/auth/google/callback',failureRedirect:'/api/auth/google/error'}
+//    => {
+//       // if (err) {
+//       //     // If an error occurred during authentication, handle it here
+//       //     console.error('Error during Google OAuth authentication:', err);
+//       //     return res.status(500).json({ error: 'Internal Server Error' });
+//       // }
+//       // if (!user) {
+//       //     // If authentication failed or user is not found, handle it here
+//       //     return res.status(401).json({ error: 'Authentication failed' });
+//       // }
+//       // // If authentication succeeded, you can send a success response here
+//       // res.sendStatus(200);
+//       res.sendStatus(200),
+//   })(req, res, next);
+// });
+
+router.get('/google/callback', passport.authenticate('google',{successRedirect:'/api/auth/google/success', failureRedirect: '/api/auth/google/error'}), 
 (req, res) =>{
   const user = req.user;
   const access_token = req.authInfo;
@@ -61,6 +87,7 @@ router.get('/google/callback', passport.authenticate('google',{ failureRedirect:
   console.log("Access Token:", access_token);
 
   //res.sendStatus(200)
+  //res.redirect('/dashboard')
   res.status(200).json({
     status: 'ok',
     user,access_token
@@ -79,10 +106,11 @@ router.get('/google/success', async (req, res) => {
   
   // const accessToken = req.session?.passport?.user?.accessToken;
   //   const refreshToken = req.session?.passport?.user?.refreshToken;
-   res.status(200).json({
-    status: 'ok',
-    user,access_token
-  });
+  //  res.status(200).json({
+  //   status: 'ok',
+  //   user,access_token
+  // });
+  res.sendStatus(200)
 });
 
 router.get('/google/error', (req, res) => res.send('Error logging in via Google..'));

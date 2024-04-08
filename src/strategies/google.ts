@@ -37,7 +37,7 @@ passport.use(
             clientID: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
             callbackURL: process.env.GOOGLE_REDIRECT_URL,
-            scope: ['email', 'profile'],
+            scope: ['email'],
         },
         async (
             accessToken: string,
@@ -46,10 +46,11 @@ passport.use(
             done: VerifyCallback
         ) => {
             try {
+                console.log("google api")
                 console.log(refreshToken)
                 // Extract email from the profile
                 const email = profile.emails?.[0]?.value;
-    
+                console.log(email)
                 if (!email) {
                     return done(new Error('No email found in Google profile'));
                 }
@@ -78,6 +79,7 @@ passport.use(
     
                 // Call done to indicate successful authentication and pass the user object
                 done(null,user,accessToken);
+                
             } catch (error:any) {
                 // If an error occurs during the authentication process, call done with the error
                 console.error('Error during Google OAuth authentication:', error);
