@@ -49,11 +49,16 @@ router.get('/logout', deserializeUser, requireUser, logoutHandler);
 // Refresh access token
 router.get('/refresh/:refresh_token', refreshAccessTokenHandler);
 
-router.get('/google', passport.authenticate('google'), (req, res) =>
+// router.get('/google', passport.authenticate('google'), (req, res) =>
 
-  res.sendStatus(200)
+//   res.sendStatus(200)
   
+// );
+
+router.get('/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
 );
+
 // router.get('/google', (req, res, next) => {
 //   passport.authenticate('google', {
 //     successRedirect: '/api/auth/google/callback',
@@ -78,41 +83,52 @@ router.get('/google', passport.authenticate('google'), (req, res) =>
 //   })(req, res, next);
 // });
 
-router.get('/google/callback', passport.authenticate('google',{ failureRedirect: '/api/auth/google/error'}), 
-(req, res) =>{
-  const user = req.user;
-  const access_token = req.authInfo;
+// router.get('/google/callback', passport.authenticate('google',{ failureRedirect: '/api/auth/google/error'}), 
+// (req, res) =>{
+//   const user = req.user;
+//   const access_token = req.authInfo;
   
-  console.log("User:", user);
-  console.log("Access Token:", access_token);
+//   console.log("User:", user);
+//   console.log("Access Token:", access_token);
 
-  //res.sendStatus(200)
-  //res.redirect('/dashboard')
-  res.status(200).json({
-    status: 'ok',
-    user,access_token
-  });
-  res.redirect('https://casca-salon-app.vercel.app/dashboard')
+//   //res.sendStatus(200)
+//   //res.redirect('/dashboard')
+//   res.status(200).json({
+//     status: 'ok',
+//     user,access_token
+//   });
+  //res.redirect('https://casca-salon-app.vercel.app/dashboard')
   //res.redirect('/api/auth/google/success');
 
-}
+//}
+//);
+
+router.get('/google/callback',
+  passport.authenticate('google', { failureRedirect: '/api/auth/google/error' }),
+  (req, res) => {
+    res.redirect('/api/auth/dashboard');
+  }
 );
-router.get('/google/success', async (req, res) => {
-  // Handle successful authentication
-  const user = req.user;
-  const access_token = req.authInfo;
-  console.log("User:", user);
-  console.log("Access Token:", access_token);
-  
-  // const accessToken = req.session?.passport?.user?.accessToken;
-  //   const refreshToken = req.session?.passport?.user?.refreshToken;
-  //  res.status(200).json({
-  //   status: 'ok',
-  //   user,access_token
-  // });
-  //res.sendStatus(200)
-  res.redirect('https://casca-salon-app.vercel.app/dashboard')
+
+router.get('/dashboard', (req, res) => {
+  res.sendStatus(200);
 });
+// router.get('/google/success', async (req, res) => {
+//   // Handle successful authentication
+//   const user = req.user;
+//   const access_token = req.authInfo;
+//   console.log("User:", user);
+//   console.log("Access Token:", access_token);
+  
+//   // const accessToken = req.session?.passport?.user?.accessToken;
+//   //   const refreshToken = req.session?.passport?.user?.refreshToken;
+//   //  res.status(200).json({
+//   //   status: 'ok',
+//   //   user,access_token
+//   // });
+//   //res.sendStatus(200)
+//   res.redirect('https://casca-salon-app.vercel.app/dashboard')
+// });
 
 router.get('/google/error', (req, res) => res.send('Error logging in via Google..'));
 

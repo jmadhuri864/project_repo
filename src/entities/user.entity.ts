@@ -11,10 +11,13 @@ import bcrypt from "bcryptjs";
 import Model from "./model.entity";
 import { UserProfile } from "./userProfile.entity";
 import { OTPclass } from "./otp.entity";
+import { nullable } from "zod";
+import { PassportUser } from "./passportinter";
+//import { User as  ExpressUser } from 'express'; 
 
 
 @Entity("users")
-export class User extends Model {
+export class User extends Model implements PassportUser {
   @Index("email_index")
   @Column({
     unique: true,
@@ -30,7 +33,8 @@ export class User extends Model {
   verified: boolean;
 
 
- 
+  @Column({nullable:true})
+  googleId: string;
 
   @Column({nullable:true, type: 'varchar' })
   provider:string|null
