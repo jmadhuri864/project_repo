@@ -29,4 +29,6 @@ export class Booking extends Model
   package: Package;
 
 
+
+
 }

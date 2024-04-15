@@ -1,3 +1,4 @@
+import { time } from "console";
 import { object, string, array, nullable, number, TypeOf, boolean } from "zod";
 
 // Define the schema for the Address entity
@@ -36,6 +37,28 @@ const ReviewSchema = object({
 const GallerySchema=object({
     imageUrl: string()
 })
+
+import { z } from "zod";
+
+const AboutUsSchema = object({
+    description: string(),
+     // and validate them using a custom parser
+})
+
+
+
+const WorkingHoursSchema = object({
+  startDay: string().min(1).max(10),
+  endDay: string().min(1).max(10),
+  openingTime: string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/),
+  closingTime: string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/),
+}).strict()
+
+export { WorkingHoursSchema };
+
+
+//export default AboutUsSchema;
+
 // Define the createSalonSchema
 export const createSalonSchema = object({
     body: object({
@@ -49,7 +72,9 @@ export const createSalonSchema = object({
         services: array(ServiceSchema),
         packages: array(PackageSchema),
         reviews: array(ReviewSchema),
-        gallery:array(GallerySchema).optional()
+        gallery:array(GallerySchema).optional(),
+        aboutus:array(AboutUsSchema),
+        workingHours:array(WorkingHoursSchema),
     }),
 });
 

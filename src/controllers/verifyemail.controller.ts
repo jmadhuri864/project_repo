@@ -193,10 +193,11 @@ console.log(passwordResetToken)
     const user = await findUserByReset(passwordResetToken);
   //console.log("user from resetpassword",user)
       if (!user) {
-        return res.status(403).json({
-          status: 'fail',
-          message: 'Invalid token or token has expired',
-        });
+        // return res.status(403).json({
+        //   status: 'fail',
+        //   message: 'Invalid token or token has expired',
+        // });
+        return next(new AppError(403, 'Invalid token or token has expired'));
       }
   
       const hashedPassword = await bcrypt.hash(req.body.password, 12);

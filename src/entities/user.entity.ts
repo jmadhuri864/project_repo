@@ -12,12 +12,12 @@ import Model from "./model.entity";
 import { UserProfile } from "./userProfile.entity";
 import { OTPclass } from "./otp.entity";
 import { nullable } from "zod";
-import { PassportUser } from "./passportinter";
+
 //import { User as  ExpressUser } from 'express'; 
 
 
 @Entity("users")
-export class User extends Model implements PassportUser {
+export class User extends Model {
   @Index("email_index")
   @Column({
     unique: true,

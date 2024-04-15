@@ -7,6 +7,8 @@ import { Package } from "./package.entity";
 import { Review } from "./review.entity";
 import { Gallery } from "./gallery.entity";
 import { Booking } from "./booking.entity";
+import { Aboutus } from "./aboutus.entity";
+import { WorkingHours } from "./workinghours.entity";
 
 // Define a constant array of valid categories
 export const VALID_CATEGORIES = ["Haircuts", "Makeup", "Manicure", "Massage","All"];
@@ -28,12 +30,17 @@ export class Salon extends Model
   @Column({ type: "simple-array" })
   categories: string[]=[];
 
+  @OneToMany(() => Aboutus, (aboutus) => aboutus.salon)
+  aboutus: Aboutus[]|null;
 
   @Column({ default: false ,nullable:true})
     bookmarked: boolean;
   
   @OneToMany(() => Address, (address) => address.salon)
   addresses: Address[]; // One salon can have multiple addresses (branches)
+
+  @OneToMany(() => WorkingHours, (workinghour) => workinghour.salon)
+  workingHours: WorkingHours[]|null; // One salon can have multiple addresses (branches)
 
   @OneToMany(() => Barber, (barber) => barber.salon)
   barbers: Barber[];

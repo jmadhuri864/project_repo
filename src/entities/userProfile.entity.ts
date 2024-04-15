@@ -31,4 +31,7 @@ export class UserProfile extends Model
     @OneToOne(() => User,user =>user.profile) // Specify the related entity
    // @JoinColumn()
     user: User; // Define the property to hold the related entity
+
+    
+
   }

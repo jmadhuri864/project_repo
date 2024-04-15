@@ -11,7 +11,7 @@ export const AddBookmarkHandler = async (
     try {
         //console.log(req.body);
         const {salonId}=req.params
-        
+         
         const bookmarked1=await addBookmark(salonId)
         
       
@@ -42,6 +42,7 @@ export const AddBookmarkHandler = async (
   
       res.status(200).json({
         status: 'success',
+        
         data:bookmarked1
       });
     } catch (err) {
@@ -58,9 +59,12 @@ export const AddBookmarkHandler = async (
     try {
         
         const allbookmark=await getSalonsbYBookmark()
-        console.log(allbookmark)
+        //console.log(allbookmark)
+        if(!allbookmark){
+          return next(new AppError(403, 'No bookmarks found'));
+        }
         
-      console.log(allbookmark);
+      //console.log(allbookmark);
   
       res.status(200).json({
         status: 'success',

@@ -1,6 +1,6 @@
 import { NextFunction,Request,Response } from "express";
 
-import { createSalonData, getAllSalons, getSalonsByCategory, getSalonsByName} from "../services/salon.service";
+import { createSalonData, findsalonById, getAllSalons, getSalonsByCategory, getSalonsByName, getsalondetailsById} from "../services/salon.service";
 import { CreateSalonSchema, SalonDTOType} from "../schemas/salon.schema";
 import AppError from "../utils/appError";
 import { Salon } from "../entities/salon.entity";
@@ -20,13 +20,20 @@ export const createSalonHandler = async (
         salonData.image=image;
         // Create a new salon using the service function
         const newSalon = await createSalonData(salonData);
-
+console.log(newSalon);
         // Send a success response
-        res.status(201).json({ message: 'Salon created successfully' ,salon: newSalon });
-    } catch (error) {
-        console.error('Error creating salon:', error);
+        //res.status(201).json({ message: 'Salon created successfully' ,salon: newSalon });
+        res.status(200).json({
+          status: 'success',
+          data: {
+            newSalon,
+          },
+        });
+    } catch (err) {
+      next(err)
+        //console.error('Error creating salon:', error);
         // Send an error response
-        res.status(500).json({ error: 'Internal server error' });
+        //res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -42,6 +49,10 @@ export const getAllSalonhandler = async (
     //   if (!salons) {
     //     return next(new AppError(404, 'Salons'));
     //   }
+    if(!salons)
+      {
+        return next(new AppError(404, 'No salons found'))
+    }
   
       res.status(200).json({
         status: 'success',
@@ -49,7 +60,7 @@ export const getAllSalonhandler = async (
           salons,
         },
       });
-    } catch (err: any) {
+    } catch (err) {
       next(err);
     }
   };
@@ -82,39 +93,75 @@ export const getAllSalonhandler = async (
   // };
 
 
-  export const getSalonsByCategoryController = async (req: Request, res: Response): Promise<void> => {
+  export const getSalonsByCategoryController = async (req: Request, res: Response,next:NextFunction): Promise<void> => {
     try {
       const category: string = req.params.category; // Assuming category is passed as a parameter in the route
       
       console.log(Salon.isValidCategory(category))
       const salons = await getSalonsByCategory(category);
-
+      if(!salons)
+        {
+          return next(new AppError(404, 'No salons found with this category'))
+      }
       console.log("here we all get salons");
   
       res.status(200).json({salons });
-    } catch (error) {
-      res.status(400).json({error});
+    } catch (err) {
+      //res.status(400).json({error});
+      next(err)
     }
   };
 
-  export const getSalonsBySearchController = async (req: Request, res: Response) => {
+  export const getSalonsBySearchController = async (req: Request, res: Response,next:NextFunction) => {
     try {
       //console.log("in search contoller")
         const name = req.params.name;
         //console.log(name);
         const salons: SalonDTOType[] = await getSalonsByName(name);
         //console.log(salons)
-
+        if(!salons)
+          {
+            return next(new AppError(404, 'No salons found with this name'))
+        }
         // If there are no salons found, send a 404 response
         if (salons.length === 0) {
-            return res.status(404).json({ message: "No salons found for the provided name." });
+            //return res.status(404).json({ message: "No salons found for the provided name." });
+            return next(new AppError(404, 'No salons found for the provided name.'));
         }
 
         // If salons are found, send them in the response
         res.status(200).json(salons);
-    } catch (error) {
+    } catch (err) {
+      next(err)
         // If an error occurs, send a 500 response with the error message
-        console.error("Error in getSalonsByName:", error);
-        res.status(500).json({ message: "Internal server error" });
+        // console.error("Error in getSalonsByName:", error);
+        // res.status(500).json({ message: "Internal server error" });
+        //return next(new AppError(505, 'Internal server error'));
     }
 };
+
+export const getsalonDetaiilsHandler=async(req: Request,
+  res: Response,
+  next: NextFunction)=>{
+    try {
+    const salonId=req.params.id
+    const salons=await findsalonById(salonId);
+    if(!salons)
+      {
+        return next(new AppError(404, 'salon is not exist with this ID'))
+    }
+    const salon=await getsalondetailsById(salonId);
+    console.log(salon);
+    res.status(200).json({
+      status: 'success',
+      salon,
+    });
+    }
+
+    catch (err) {
+      next(err);
+    }
+    
+
+
+  }

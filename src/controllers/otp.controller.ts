@@ -3,6 +3,7 @@ import { OTPclass } from "../entities/otp.entity";
 import { sendEmail } from "../utils/sendEmail";
 import {hashData,verifyHashedData} from "../utils/hashData"
 import { DeepPartial } from "typeorm";
+import AppError from "../utils/appError";
 
 export const requestForNewOTPHandller = async (
     req: Request,
@@ -94,7 +95,8 @@ export const verifyOTPhandler = async(
         try {
             const { email, otp } = req.body;
             if (!email || !otp) {
-                throw Error("Provide values for email and otp");
+                return next(new AppError(400, 'Provide values for email and otp'));
+                //throw Error("Provide values for email and otp");
             }
     
             // Ensure OTP record exists
@@ -102,7 +104,8 @@ export const verifyOTPhandler = async(
            const matchedOTPRecord = await OTPclass.findOne({ where: { email } });
 
             if (!matchedOTPRecord) {
-                throw Error("No OTP record found");
+                //throw Error("No OTP record found");
+                return next(new AppError(404, 'No OTP record found'));
             }
     
             const expiresAt: Date = matchedOTPRecord.expiresAt; // Ensure expiresAt is a Date object

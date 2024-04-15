@@ -50,8 +50,10 @@ export const getprofileHandler = async (
    const user = res.locals.user;
     //const name=res.locals.userProfile.nickname;
     console.log(userprofile)
-
-    res.status(200).status(200).json({
+    if (!userprofile) {
+      return next(new AppError(404, 'User profile not found'));
+    }
+    res.status(200).json({
       status: 'success',
       data: {
         userprofile,
@@ -81,8 +83,11 @@ export const updateprofileHandler = async (
    const user = res.locals.user;
     //const name=res.locals.userProfile.nickname;
     console.log(userprofile)
+    if (!userprofile) {
+      return next(new AppError(404, 'Profile with that ID not found'));
+    }
 
-    res.status(200).status(200).json({
+    res.status(200).json({
       status: 'success',
       data: {
         userprofile,

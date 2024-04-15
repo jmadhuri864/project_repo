@@ -8,6 +8,8 @@ import { CreateSalonSchema, SalonDTOType } from "../schemas/salon.schema";
 import { AppDataSource } from "../utils/data-source";
 import { VALID_CATEGORIES } from '../entities/salon.entity';
 import { Gallery } from "../entities/gallery.entity";
+import { Aboutus } from "../entities/aboutus.entity";
+import { WorkingHours } from "../entities/workinghours.entity";
 const salonRepository = AppDataSource.getRepository(Salon);
 
 // export const createSalonData = async (input: Salon) => {
@@ -30,6 +32,8 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
   salon.packages = [];
   salon.reviews = [];
   salon.gallery=[];
+  salon.aboutus=[];
+  salon.workingHours=[];
 
   // Loop through and save each address, barber, service, package, and review
   for (const addressData of input.addresses) {
@@ -93,7 +97,28 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
     await salonRepository.manager.save(gallery);
     salon.gallery.push(gallery);
   }
-  // Save the Salon entity
+
+  for (const aboutusData of input.aboutus ?? []) {
+    
+    const aboutus = new Aboutus();
+    aboutus.description =aboutusData.description;
+    
+    await salonRepository.manager.save(aboutus);
+    salon.aboutus.push();
+  }
+  for (const WorkingHoursData of input.workingHours ?? []) {
+    
+    const workingHours = new WorkingHours();
+    workingHours.startDay=WorkingHoursData.startDay;
+    workingHours.endDay=WorkingHoursData.endDay;
+    // workingHours.openingTime=WorkingHoursData.openingTime;
+    // workingHours.closingTime=WorkingHoursData.closingTime;
+     // Convert string to Date for openingTime and closingTime
+     workingHours.openingTime = parseTimeStringToDateTime(WorkingHoursData.openingTime);
+     workingHours.closingTime = parseTimeStringToDateTime(WorkingHoursData.closingTime);
+    await salonRepository.manager.save(workingHours);
+    salon.workingHours.push(workingHours);
+  }
   return await salonRepository.save(salon);
 };
 
@@ -281,4 +306,61 @@ console.log(salons);
   });
 
   return salonsDTO;
+};
+
+
+
+export const getsalondetailsById = async (salonId: string): Promise<any> => {
+  try {
+    //const salonRepository = getRepository(Salon);
+
+    // Fetch salon details with related entities
+    const salon = await salonRepository
+      .createQueryBuilder('salon')
+      .leftJoinAndSelect('salon.addresses', 'addresses')
+      .leftJoinAndSelect('salon.barbers', 'barbers')
+      .leftJoinAndSelect('salon.reviews', 'reviews')
+      .where('salon.id = :id', { id: salonId })
+      .getOneOrFail();
+
+    // Construct response object
+    const salonDetails = {
+      name: salon.name,
+      address: salon.addresses.map(address => ({
+        street: address.street,
+        city: address.city,
+      })),
+      rating: calculateAverageRating(salon.reviews),
+      barbers: salon.barbers.map(barber => ({
+        name: `${barber.first_name} ${barber.last_name}`,
+        photo: barber.image,
+        specialty: barber.specialty,
+      })),
+    };
+
+    return salonDetails;
+  } catch (error) {
+    console.error(error);
+    
+    throw new Error('Failed to fetch salon details');
+  }
+};
+
+
+function parseTimeStringToDateTime(timeString: string): Date {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  const date = new Date();
+  date.setHours(hours, minutes);
+  return date;
+}
+
+function calculateAverageRating(reviews: Review[]) {
+  if (reviews.length === 0) return 0;
+
+  const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+  return totalRating / reviews.length;
+}
+
+export const findsalonById = async (salonId: string) => {
+  return await salonRepository.findOneBy({ id: salonId });
 };
