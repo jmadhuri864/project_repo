@@ -21,7 +21,7 @@ export const verifyemailhandler = async (
     const { email } = req.body;
     console.log(email);
     if (!email) {
-      res.send(next(new AppError(404, 'An email is required!')));
+      return next(new AppError(404, 'An email is required!'));
     }
 
     // Check if the user exists in the database
@@ -29,7 +29,7 @@ export const verifyemailhandler = async (
   
     console.log(existingUser)
     if (!existingUser) {
-      res.send(next(new AppError(404, 'There is no account for the provided email.')));
+      return next(new AppError(404, 'There is no account for the provided email.'));
     }
 
     // Send OTP for email verification
