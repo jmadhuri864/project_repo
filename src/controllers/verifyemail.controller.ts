@@ -25,7 +25,8 @@ export const verifyemailhandler = async (
     }
 
     // Check if the user exists in the database
-    const existingUser = await User.findBy({ email });
+    const existingUser = await User.existsBy({email})   //find({where: email });
+  
     console.log(existingUser)
     if (!existingUser) {
       return next(new AppError(404, 'There is no account for the provided email.'));
