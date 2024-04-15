@@ -7,7 +7,7 @@ import { Package } from "./package.entity";
 import { Review } from "./review.entity";
 import { Gallery } from "./gallery.entity";
 import { Booking } from "./booking.entity";
-import { Aboutus } from "./aboutus.entity";
+
 import { WorkingHours } from "./workinghours.entity";
 
 // Define a constant array of valid categories
@@ -30,8 +30,8 @@ export class Salon extends Model
   @Column({ type: "simple-array" })
   categories: string[]=[];
 
-  @OneToMany(() => Aboutus, (aboutus) => aboutus.salon)
-  aboutus: Aboutus[]|null;
+  @Column({nullable:true})
+    description:string;
 
   @Column({ default: false ,nullable:true})
     bookmarked: boolean;

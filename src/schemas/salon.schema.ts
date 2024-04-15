@@ -38,12 +38,8 @@ const GallerySchema=object({
     imageUrl: string()
 })
 
-import { z } from "zod";
 
-const AboutUsSchema = object({
-    description: string(),
-     // and validate them using a custom parser
-})
+
 
 
 
@@ -66,6 +62,7 @@ export const createSalonSchema = object({
         contactno: string(),
         bookmarked:boolean(),
         image:string(),
+        description:string(),
         categories: array(string()).nullable(),
         addresses: array(AddressSchema),
         barbers: array(BarberSchema),
@@ -73,7 +70,7 @@ export const createSalonSchema = object({
         packages: array(PackageSchema),
         reviews: array(ReviewSchema),
         gallery:array(GallerySchema).optional(),
-        aboutus:array(AboutUsSchema),
+       // aboutus:array(AboutUsSchema),
         workingHours:array(WorkingHoursSchema),
     }),
 });

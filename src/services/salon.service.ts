@@ -8,7 +8,7 @@ import { CreateSalonSchema, SalonDTOType } from "../schemas/salon.schema";
 import { AppDataSource } from "../utils/data-source";
 import { VALID_CATEGORIES } from '../entities/salon.entity';
 import { Gallery } from "../entities/gallery.entity";
-import { Aboutus } from "../entities/aboutus.entity";
+
 import { WorkingHours } from "../entities/workinghours.entity";
 const salonRepository = AppDataSource.getRepository(Salon);
 
@@ -25,6 +25,7 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
   salon.bookmarked=input.bookmarked;
   salon.contactno = input.contactno;
   salon.image=input.image;
+  salon.description=input.description;
   salon.categories = categories;
   salon.addresses = [];
   salon.barbers = [];
@@ -32,7 +33,7 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
   salon.packages = [];
   salon.reviews = [];
   salon.gallery=[];
-  salon.aboutus=[];
+  
   salon.workingHours=[];
 
   // Loop through and save each address, barber, service, package, and review
@@ -98,15 +99,7 @@ export const createSalonData = async (input: CreateSalonSchema): Promise<Salon> 
     salon.gallery.push(gallery);
   }
 
-  for (const aboutusData of input.aboutus ?? []) {
-    
-    const aboutus = new Aboutus();
-    aboutus.description =aboutusData.description;
-    
-    await salonRepository.manager.save(aboutus);
-    salon.aboutus.push();
-  }
-  for (const WorkingHoursData of input.workingHours ?? []) {
+    for (const WorkingHoursData of input.workingHours ?? []) {
     
     const workingHours = new WorkingHours();
     workingHours.startDay=WorkingHoursData.startDay;
@@ -363,4 +356,46 @@ function calculateAverageRating(reviews: Review[]) {
 
 export const findsalonById = async (salonId: string) => {
   return await salonRepository.findOneBy({ id: salonId });
+};
+
+
+export const findSalonAboutus = async (salonId: string) => {
+  try {
+    const salon = await salonRepository
+      .createQueryBuilder('salon')
+      .leftJoinAndSelect('salon.addresses', 'addresses')
+      .leftJoinAndSelect('salon.workingHours', 'workingHours')
+      .where('salon.id = :id', { id: salonId })
+      .getOneOrFail();
+
+    // Extract relevant details
+    const salonDetails: any = {
+      name: salon.name,
+      description: salon.description, // Assuming description is a property of the Salon entity
+      contactno: salon.contactno,
+      address: [],
+      workingHours: [],
+    };
+
+    if (salon.addresses) {
+      salonDetails.address = salon.addresses.map((address: Address) => ({
+        street: address.street,
+        city: address.city,
+      }));
+    }
+
+    if (salon.workingHours) {
+      salonDetails.workingHours = salon.workingHours.map((hours: WorkingHours) => ({
+        startDay: hours.startDay,
+        endDay: hours.endDay,
+        openingTime: hours.openingTime,
+        closingTime: hours.closingTime,
+      }));
+    }
+
+    return salonDetails;
+  } catch (error) {
+    console.error('Error fetching salon details:', error);
+    throw new Error('Error fetching salon details');
+  }
 };

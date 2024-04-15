@@ -1,6 +1,6 @@
 import { NextFunction,Request,Response } from "express";
 
-import { createSalonData, findsalonById, getAllSalons, getSalonsByCategory, getSalonsByName, getsalondetailsById} from "../services/salon.service";
+import { createSalonData, findSalonAboutus, findsalonById, getAllSalons, getSalonsByCategory, getSalonsByName, getsalondetailsById} from "../services/salon.service";
 import { CreateSalonSchema, SalonDTOType} from "../schemas/salon.schema";
 import AppError from "../utils/appError";
 import { Salon } from "../entities/salon.entity";
@@ -165,3 +165,23 @@ export const getsalonDetaiilsHandler=async(req: Request,
 
 
   }
+
+
+  export const getsalonaboutusHandler=async(req: Request,
+    res: Response,
+    next: NextFunction)=>{
+      try {
+      const salonId=req.params.id;
+      const salons=await findsalonById(salonId);
+    if(!salons)
+      {
+        return next(new AppError(404, 'salon is not exist with this ID'))
+    }
+    const salonDetail = await findSalonAboutus(salonId);
+    res.json(salonDetail);
+  }
+  catch(err)
+  {
+    next(err)
+  }
+}
