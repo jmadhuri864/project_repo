@@ -44,6 +44,9 @@ export const verifyemailhandler = async (
     // Respond to the client with the result
     res.status(200).json(otpResult);
   } catch (err) {
+    if(err===404)
+      res.status(400).send('There is no account for the provided email.');
+    else
     next(err);
   }
 };
