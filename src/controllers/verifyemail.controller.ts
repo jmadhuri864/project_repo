@@ -29,7 +29,7 @@ export const verifyemailhandler = async (
   
     console.log(existingUser)
     if (!existingUser) {
-      return next(new AppError(404, 'There is no account for the provided email.'));
+      return res.status(400).send( 'There is no account for the provided email.');
     }
 
     // Send OTP for email verification

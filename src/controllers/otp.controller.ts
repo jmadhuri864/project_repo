@@ -111,7 +111,8 @@ export const verifyOTPhandler = async(
             const expiresAt: Date = matchedOTPRecord.expiresAt; // Ensure expiresAt is a Date object
             if (expiresAt.getTime() < Date.now()) {
                 await OTPclass.delete({ email });
-                throw Error("The OTP has expired. Request a new one.");
+                //throw Error("The OTP has expired. Request a new one.");
+                return next(new AppError(400, 'The OTP has expired. Request a new one.'));
             }
     
             // Not expired yet, verify the OTP value

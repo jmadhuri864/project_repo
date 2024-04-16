@@ -399,3 +399,66 @@ export const findSalonAboutus = async (salonId: string) => {
     throw new Error('Error fetching salon details');
   }
 };
+
+
+export const findSalonServices = async (salonId: string) => {
+  try {
+    const salon = await salonRepository
+      .createQueryBuilder('salon')
+      .leftJoinAndSelect('salon.services', 'service')
+      .where('salon.id = :id', { id: salonId })
+      .getOneOrFail();
+
+    const salonServices = salon.services.map((service: Service) => ({
+      name: service.name,
+      // Add other properties of the service you want to include here
+    }));
+
+    return salonServices;
+  } catch (error) {
+    console.error('Error fetching salon services:', error);
+    throw new Error('Error fetching salon services');
+  }
+};
+
+//findSalonGallery(salonId)
+
+export const findSalonGallery = async (salonId: string) => {
+  try {
+    const salon = await salonRepository
+      .createQueryBuilder('salon')
+      .leftJoinAndSelect('salon.gallery', 'gallery')
+      .where('salon.id = :id', { id: salonId })
+      .getOneOrFail();
+
+    const gallaryservice = salon.gallery?.map((gallery: Gallery) => ({
+      url: gallery.imageUrl,
+      // Add other properties of the service you want to include here
+    }));
+
+    return gallaryservice;
+  } catch (error) {
+    console.error('Error fetching salon services:', error);
+    throw new Error('Error fetching salon services');
+  }
+};
+
+
+export const getSalonPackagesService = async (salonId: string) => {
+  try {
+    const salon = await salonRepository
+      .createQueryBuilder('salon')
+      .leftJoinAndSelect('salon.packages', 'packages') // Corrected to 'packages' instead of 'salon.packages'
+      .where('salon.id = :id', { id: salonId })
+      .getOneOrFail();
+
+    const packageServices = salon.packages.map((packages) => ({
+      name: packages.name,
+      // You can include other properties of the package here if needed
+    }));
+
+    return packageServices;
+  } catch (err) {
+    throw new Error('Error fetching salon packages'); // Improved error message
+  }
+};

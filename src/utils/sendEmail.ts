@@ -28,3 +28,4 @@ export const sendEmail = async (mailOptions: nodemailer.SendMailOptions) => {
         console.error("Error sending email:", error);
     }
 };
+
