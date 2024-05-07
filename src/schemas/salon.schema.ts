@@ -82,7 +82,7 @@ export const SalonDTO = object({
     image: string(),
     addresses: array(AddressSchema),
     //star: ReviewSchema.pick({stars:true}),
-    stars:number()    
+    rating:number()    
     //.shape({ stars: number() }).pick({ stars: true }),
 });
 

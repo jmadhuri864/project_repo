@@ -147,7 +147,7 @@ export const getAllSalons = async (): Promise<SalonDTOType[]> => {
           image: salon.image,
           addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
           //star: { stars: maxStars },
-          stars:maxStars,
+          rating:maxStars,
           bookmarked:salon.bookmarked // Send the maximum number of stars as an array with a single object
       };
   });
@@ -210,7 +210,7 @@ export const getSalonsByCategory = async (category: string): Promise<SalonDTOTyp
         name: salon.name,
         image: salon.image,
         addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
-        stars: Math.max(...salon.reviews.map(review => review.stars)) ,
+        rating: Math.max(...salon.reviews.map(review => review.stars)) ,
         bookmarked:salon.bookmarked
       }));
     } else if (Salon.isValidCategory(category)) {
@@ -228,7 +228,7 @@ export const getSalonsByCategory = async (category: string): Promise<SalonDTOTyp
         name: salon.name,
         image: salon.image,
         addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
-        stars: Math.max(...salon.reviews.map(review => review.stars)) ,
+        rating: Math.max(...salon.reviews.map(review => review.stars)) ,
         bookmarked:salon.bookmarked
       }));
     } else {
@@ -263,7 +263,7 @@ export const getSalonsByName = async (name: string): Promise<SalonDTOType[]> => 
       name: salon.name,
       image: salon.image,
       addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
-      stars:  salon.reviews ? Math.max(...salon.reviews.map(review => review.stars)) : 0 ,
+      rating:  salon.reviews ? Math.max(...salon.reviews.map(review => review.stars)) : 0 ,
       bookmarked:salon.bookmarked
     }));
     //console.log("before return");
@@ -294,7 +294,7 @@ console.log(salons);
           name: salon.name,
           image: salon.image,
           addresses: salon.addresses.map(address => ({ street: address.street, city: address.city })),
-          stars: maxStars , // Send the maximum number of stars as an array with a single object
+          rating: maxStars , // Send the maximum number of stars as an array with a single object
           bookmarked:salon.bookmarked
       };
   });

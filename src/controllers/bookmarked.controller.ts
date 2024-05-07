@@ -41,8 +41,8 @@ export const AddBookmarkHandler = async (
       
   
       res.status(200).json({
-        status: 'success',
-        
+        status: 'bookmark deleted',
+        //message:"bookmark deleted",
         data:bookmarked1
       });
     } catch (err) {
