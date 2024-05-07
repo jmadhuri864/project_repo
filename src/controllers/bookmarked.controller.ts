@@ -17,7 +17,7 @@ export const AddBookmarkHandler = async (
       
   
       res.status(200).json({
-        status: 'success',
+        status: 'successfully add BookMark',
         data:bookmarked1
       });
     } catch (err) {
