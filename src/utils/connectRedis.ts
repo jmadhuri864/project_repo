@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 
- const redisUrl = 'redis://localhost:6379';
+ const redisUrl = 'redis://localhost:6378';
 //const redisUrl = 'rediss://default:AVNS_j2KxzPsOnnIKVbSjnK3@redis-2ad1d044-jadhavm21199-22ca.a.aivencloud.com:26318';
 //const redisUrl = 'rediss://red-cnapgof109ks739nql5g:kpQis18TQmio9mGK8zPbRAopbvUfymZu@singapore-redis.render.com:6379';
 

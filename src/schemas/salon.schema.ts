@@ -81,7 +81,8 @@ export const SalonDTO = object({
     name: string(),
     image: string(),
     addresses: array(AddressSchema),
-    star: ReviewSchema.pick({stars:true})
+    //star: ReviewSchema.pick({stars:true}),
+    stars:number()    
     //.shape({ stars: number() }).pick({ stars: true }),
 });
 

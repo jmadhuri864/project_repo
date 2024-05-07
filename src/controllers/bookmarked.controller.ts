@@ -57,7 +57,7 @@ export const AddBookmarkHandler = async (
     next: NextFunction
   ) => {
     try {
-        
+        console.log("in the add bookmark api");
         const allbookmark=await getSalonsbYBookmark()
         //console.log(allbookmark)
         if(!allbookmark){

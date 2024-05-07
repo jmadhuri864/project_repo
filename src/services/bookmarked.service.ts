@@ -25,7 +25,7 @@ export const addBookmark = async (salonId: string) => {
             name: salon.name,
             image: salon.image,
             addresses: salon.addresses ?salon.addresses.map(address => ({ street: address.street, city: address.city })):[],
-            star: { stars: maxStars },
+            stars:  maxStars ,
             bookmarked:salon.bookmarked // Send the maximum number of stars as an array with a single object
         };
         
@@ -55,7 +55,7 @@ export const deleteBookmark = async (salonId: string) => {
             name: salon.name,
             image: salon.image,
             addresses: salon.addresses ?salon.addresses.map(address => ({ street: address.street, city: address.city })):[],
-            star: { stars: maxStars },
+            stars: maxStars ,
             bookmarked:salon.bookmarked // Send the maximum number of stars as an array with a single object
         };
         
